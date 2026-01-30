@@ -422,41 +422,36 @@ export default function App() {
                 const lastCoach = lastAssistant?.coachId ? COACHES.find(c => c.id === lastAssistant.coachId) : null;
                 
                 return (
-                  <div className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-6 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
-                    <div className="absolute -right-4 -bottom-4 text-[100px] opacity-10">💬</div>
+                  <div className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-4 rounded-2xl text-white shadow-lg relative overflow-hidden">
+                    <div className="absolute -right-2 -bottom-2 text-[60px] opacity-10">💬</div>
                     <div className="relative z-10">
                       {userMessages.length > 0 ? (
                         <>
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/30">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="px-2 py-0.5 bg-white/20 rounded-full text-[9px] font-bold uppercase tracking-wider">
                               최근 상담
                             </div>
                             {lastCoach && (
-                              <div className="px-2 py-1 bg-white/15 rounded-lg text-[10px] font-bold flex items-center gap-1">
-                                <span>{lastCoach.avatar}</span>
-                                <span>{lastCoach.name} 코치</span>
+                              <div className="px-1.5 py-0.5 bg-white/15 rounded text-[9px] font-medium flex items-center gap-1">
+                                <span className="text-xs">{lastCoach.avatar}</span>
+                                <span>{lastCoach.name}</span>
                               </div>
                             )}
                           </div>
-                          <p className="text-[16px] font-bold leading-relaxed mb-3 line-clamp-2">
+                          <p className="text-[13px] font-medium leading-snug mb-2 line-clamp-1">
                             "{userMessages[userMessages.length - 1]?.content}"
                           </p>
-                          <div className="flex items-center gap-2 text-white/80">
-                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                            <span className="text-[11px] font-bold">총 {userMessages.length}개의 질문에 답변 완료</span>
+                          <div className="flex items-center gap-1.5 text-white/80">
+                            <span className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></span>
+                            <span className="text-[10px] font-medium">총 {userMessages.length}개 질문 답변 완료</span>
                           </div>
                         </>
                       ) : (
                         <>
-                          <div className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/30 mb-3 inline-block">
-                            시작하기
-                          </div>
-                          <p className="text-[17px] font-bold leading-relaxed mb-3">
+                          <p className="text-[13px] font-medium leading-snug mb-1">
                             AI 코치에게 첫 질문을 해보세요! 🎉
                           </p>
-                          <div className="flex items-center gap-2 text-white/80">
-                            <span className="text-[11px] font-bold">수면, 이유식, 발달, 심리, 배변 무엇이든 물어보세요</span>
-                          </div>
+                          <span className="text-[10px] text-white/70">수면, 이유식, 발달, 심리, 배변</span>
                         </>
                       )}
                     </div>
