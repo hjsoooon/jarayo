@@ -149,41 +149,47 @@ export default function App() {
               <div className="w-10 h-1 bg-gray-200 rounded-full"></div>
             </div>
             
-            {/* 헤더 */}
-            <div className={`relative h-32 bg-gradient-to-br ${selectedGuide.gradient} overflow-hidden shrink-0`}>
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_50%,white_0%,transparent_60%)]"></div>
-              <div className="absolute right-4 bottom-2 text-[70px] opacity-90 drop-shadow-lg">
-                {selectedGuide.emoji}
+            {/* 헤더 - 채팅창 카드와 동일한 스타일 */}
+            <div className="relative px-5 pt-2 pb-4 bg-white shrink-0 border-b border-gray-100">
+              <div className="flex items-start gap-4">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedGuide.gradient} flex items-center justify-center text-3xl shadow-lg shrink-0`}>
+                  {selectedGuide.emoji}
+                </div>
+                <div className="flex-1 min-w-0 pt-1">
+                  <span className={`inline-block px-2 py-0.5 rounded-md text-[9px] font-bold mb-1.5 ${
+                    selectedGuide.category === 'SLEEP' ? 'bg-indigo-50 text-indigo-600' : 
+                    selectedGuide.category === 'NUTRITION' ? 'bg-teal-50 text-teal-600' : 
+                    selectedGuide.category === 'PSYCHOLOGY' ? 'bg-pink-50 text-pink-600' : 
+                    selectedGuide.category === 'DEVELOPMENT' ? 'bg-green-50 text-green-600' : 
+                    selectedGuide.category === 'POOP' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600'
+                  }`}>
+                    {selectedGuide.category === 'SLEEP' ? '💤 수면 가이드' : 
+                     selectedGuide.category === 'NUTRITION' ? '🥣 영양 가이드' : 
+                     selectedGuide.category === 'PSYCHOLOGY' ? '🧠 심리 가이드' : 
+                     selectedGuide.category === 'DEVELOPMENT' ? '🌱 발달 가이드' : 
+                     selectedGuide.category === 'POOP' ? '🚽 배변 가이드' : '💡 육아 팁'}
+                  </span>
+                  <h2 className="text-[16px] font-black text-[#222] leading-tight">{selectedGuide.title}</h2>
+                </div>
+                <button 
+                  onClick={() => setSelectedGuide(null)}
+                  className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-400 transition-colors shrink-0"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
               </div>
-              <div className="absolute top-3 left-4">
-                <span className="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/25 text-white backdrop-blur-sm border border-white/20">
-                  {selectedGuide.category === 'SLEEP' ? '💤 수면' : 
-                   selectedGuide.category === 'NUTRITION' ? '🥣 영양' : 
-                   selectedGuide.category === 'PSYCHOLOGY' ? '🧠 심리' : 
-                   selectedGuide.category === 'DEVELOPMENT' ? '🌱 발달' : 
-                   selectedGuide.category === 'POOP' ? '🚽 배변' : '💡 팁'}
-                </span>
-              </div>
-              <button 
-                onClick={() => setSelectedGuide(null)}
-                className="absolute top-3 right-3 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-              </button>
             </div>
             
             {/* 스크롤 가능한 콘텐츠 */}
             <div className="flex-1 overflow-y-auto hide-scrollbar">
               <div className="p-5 pb-6">
-                <h2 className="text-[18px] font-black text-[#222] mb-2">{selectedGuide.title}</h2>
-                
                 {/* 상세 가이드가 있는 경우 */}
                 {selectedGuide.fullGuide ? (
                   <>
                     {/* 인트로 */}
-                    <p className="text-[13px] text-gray-600 leading-relaxed mb-5 bg-gray-50 p-3 rounded-xl">
+                    <p className="text-[13px] text-gray-600 leading-relaxed mb-5 bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-100">
                       {selectedGuide.fullGuide.intro}
                     </p>
                     
@@ -279,7 +285,7 @@ export default function App() {
                     ))}
                   </div>
                   <div>
-                    <h1 className="header-title text-[18px] leading-tight">JARAYO</h1>
+                    <h1 className="header-title text-[18px] leading-tight">JARAYO team</h1>
                     <span className="text-[10px] text-gray-400">AI 육아 코치</span>
                   </div>
                 </div>
