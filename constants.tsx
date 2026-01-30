@@ -74,32 +74,64 @@ export const CAROUSEL_TIPS: CarouselTip[] = [
   }
 ];
 
-// 각 코치별 일러스트 카드 콘텐츠
+// 각 코치별 일러스트 카드 콘텐츠 (상세 가이드 포함)
 export const ILLUSTRATION_CARDS = {
   SLEEP: [
     {
       id: 'sleep-1',
       title: '꿀잠 수면 의식 가이드',
       description: '아이가 스스로 잠들 수 있는 루틴을 만들어보세요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3094/3094837.png',
       gradient: 'from-indigo-400 to-purple-500',
-      emoji: '🌙'
+      emoji: '🌙',
+      fullGuide: {
+        intro: '수면 의식은 아이에게 "이제 잘 시간이야"라는 신호를 보내는 중요한 루틴이에요. 매일 같은 순서로 진행하면 아이가 자연스럽게 잠들 준비를 해요.',
+        steps: [
+          { icon: '🛁', title: '따뜻한 목욕', desc: '잠자기 30분 전, 38-40도 물로 10분간 목욕시켜요' },
+          { icon: '👶', title: '마사지 & 로션', desc: '부드럽게 발 → 다리 → 배 → 팔 순서로 마사지해요' },
+          { icon: '👕', title: '잠옷 갈아입기', desc: '편안한 잠옷으로 갈아입히며 "잠잘 시간"을 인지시켜요' },
+          { icon: '🍼', title: '수유 또는 자장가', desc: '조용한 환경에서 수유하거나 자장가를 불러줘요' },
+          { icon: '💤', title: '침대에 눕히기', desc: '졸린 상태에서 눕혀 스스로 잠드는 연습을 해요' }
+        ],
+        tips: ['매일 같은 시간에 시작하세요', '15-20분 내로 짧게 진행하세요', '잠들기 전 자극적인 놀이는 피하세요'],
+        relatedQuestion: '수면 의식 루틴 만들기가 어려워요'
+      }
     },
     {
       id: 'sleep-2',
       title: '화이트노이즈 활용법',
       description: '엄마 뱃속 소리와 비슷한 환경을 만들어줘요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/2913/2913465.png',
       gradient: 'from-blue-400 to-indigo-500',
-      emoji: '🎵'
+      emoji: '🎵',
+      fullGuide: {
+        intro: '화이트노이즈는 엄마 뱃속에서 들었던 심장 소리, 혈류 소리와 비슷해서 신생아에게 안정감을 줘요. 수면 유도와 깊은 잠 유지에 효과적이에요.',
+        steps: [
+          { icon: '📱', title: '소리 선택', desc: '빗소리, 파도소리, 선풍기 소리 등 균일한 소리를 선택해요' },
+          { icon: '🔊', title: '볼륨 조절', desc: '50-60dB (샤워기 소리 정도)로 맞춰요, 너무 크면 안돼요' },
+          { icon: '📍', title: '위치 설정', desc: '아이 침대에서 1-2m 떨어진 곳에 배치해요' },
+          { icon: '⏰', title: '타이머 설정', desc: '잠든 후 30-60분 뒤 꺼지도록 타이머를 설정해요' }
+        ],
+        tips: ['잠들 때뿐 아니라 낮잠에도 사용하면 좋아요', '12개월 이후에는 서서히 줄여나가세요', '직접 귀에 대지 마세요'],
+        relatedQuestion: '화이트노이즈 언제까지 사용해도 될까요?'
+      }
     },
     {
       id: 'sleep-3',
       title: '수면 환경 체크리스트',
       description: '온도, 습도, 조명을 최적화해보세요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3094/3094825.png',
       gradient: 'from-violet-400 to-purple-500',
-      emoji: '🛏️'
+      emoji: '🛏️',
+      fullGuide: {
+        intro: '아이의 숙면을 위해 수면 환경은 매우 중요해요. 적정 온도, 습도, 조명만 잘 맞춰도 수면의 질이 확 달라져요.',
+        steps: [
+          { icon: '🌡️', title: '온도 체크', desc: '실내 온도 20-22도 유지 (아이 뒷목이 따뜻하면 OK)' },
+          { icon: '💧', title: '습도 체크', desc: '습도 50-60% 유지 (가습기 or 젖은 수건 활용)' },
+          { icon: '🌑', title: '조명 체크', desc: '암막 커튼으로 어둡게 (수유 시 간접 조명 사용)' },
+          { icon: '🔇', title: '소음 체크', desc: '갑작스러운 소리 차단 (문틈 막기, 러그 깔기)' },
+          { icon: '🛏️', title: '침구 체크', desc: '딱딱한 매트리스 + 가벼운 이불 (얼굴 덮이지 않게)' }
+        ],
+        tips: ['아이 손발이 차가워도 뒷목이 따뜻하면 괜찮아요', '해가 뜨기 전부터 방을 어둡게 유지하세요', '향이 강한 방향제는 피하세요'],
+        relatedQuestion: '아이 방 적정 온도가 몇 도예요?'
+      }
     }
   ],
   NUTRITION: [
@@ -107,25 +139,56 @@ export const ILLUSTRATION_CARDS = {
       id: 'nutrition-1',
       title: '초기 이유식 시작하기',
       description: '생후 6개월, 첫 이유식 시작 가이드',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/2515/2515183.png',
       gradient: 'from-emerald-400 to-teal-500',
-      emoji: '🥣'
+      emoji: '🥣',
+      fullGuide: {
+        intro: '이유식은 보통 생후 만 6개월에 시작해요. 아이가 고개를 가누고, 음식에 관심을 보이면 시작 신호예요!',
+        steps: [
+          { icon: '🍚', title: '쌀미음부터', desc: '10배죽으로 시작, 1티스푼부터 천천히 늘려요' },
+          { icon: '⏰', title: '시간 선택', desc: '오전 10-11시, 아이 기분 좋을 때 시도해요' },
+          { icon: '🥄', title: '숟가락 적응', desc: '실리콘 숟가락으로 입술에 살짝 대어 적응시켜요' },
+          { icon: '📅', title: '3일 규칙', desc: '새 재료는 3일간 같은 것만, 알레르기 반응 확인해요' },
+          { icon: '📈', title: '점차 증가', desc: '한 달 후 2가지 재료 혼합 가능, 양도 늘려요' }
+        ],
+        tips: ['처음엔 뱉어도 괜찮아요, 연습이에요', '수유량은 갑자기 줄이지 마세요', '식사 시간은 30분 이내로'],
+        relatedQuestion: '이유식 시작 시기가 언제예요?'
+      }
     },
     {
       id: 'nutrition-2',
       title: '영양 균형 맞추기',
       description: '단백질, 철분, 비타민을 골고루 섭취해요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png',
       gradient: 'from-cyan-400 to-teal-500',
-      emoji: '🥗'
+      emoji: '🥗',
+      fullGuide: {
+        intro: '생후 6개월부터는 모유/분유만으로 철분이 부족해져요. 이유식으로 철분, 단백질, 비타민을 보충해야 해요.',
+        steps: [
+          { icon: '🥩', title: '철분 섭취', desc: '소고기, 달걀 노른자, 시금치로 철분 보충해요' },
+          { icon: '🥚', title: '단백질 섭취', desc: '두부, 생선, 닭가슴살로 근육 발달을 도와요' },
+          { icon: '🥕', title: '비타민 섭취', desc: '당근, 고구마, 브로콜리로 면역력을 키워요' },
+          { icon: '⚖️', title: '비율 맞추기', desc: '곡류:단백질:채소 = 1:1:1 비율로 구성해요' }
+        ],
+        tips: ['하루 1번 소고기를 꼭 넣어주세요', '채소는 다양한 색깔로 골라주세요', '과일은 후식으로 조금만'],
+        relatedQuestion: '철분 보충 어떻게 해야 해요?'
+      }
     },
     {
       id: 'nutrition-3',
       title: '알레르기 체크 가이드',
       description: '새로운 식재료는 3일 규칙으로 시작해요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/2966/2966327.png',
       gradient: 'from-teal-400 to-cyan-500',
-      emoji: '📋'
+      emoji: '📋',
+      fullGuide: {
+        intro: '알레르기 반응은 보통 섭취 후 2시간 이내, 늦으면 2-3일 내에 나타나요. 새 재료는 신중하게 시도해요.',
+        steps: [
+          { icon: '📝', title: '기록하기', desc: '먹인 재료, 시간, 양을 모두 기록해요' },
+          { icon: '👀', title: '반응 관찰', desc: '피부 발진, 구토, 설사, 얼굴 붓기를 확인해요' },
+          { icon: '⏳', title: '3일 대기', desc: '같은 재료를 3일간 주고 반응을 관찰해요' },
+          { icon: '🚨', title: '고위험 식품', desc: '계란흰자, 우유, 밀, 땅콩, 갑각류는 특히 주의해요' }
+        ],
+        tips: ['새 재료는 오전에 시도해 병원 갈 수 있게', '알레르기 이력 있으면 의사와 상담 후 시작', '형제에게 알레르기 있으면 더 주의'],
+        relatedQuestion: '알레르기 반응이 어떻게 나타나요?'
+      }
     }
   ],
   PSYCHOLOGY: [
@@ -133,25 +196,58 @@ export const ILLUSTRATION_CARDS = {
       id: 'psych-1',
       title: '애착 형성 놀이법',
       description: '눈맞춤과 스킨십으로 유대감을 키워요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/4213/4213958.png',
       gradient: 'from-pink-400 to-rose-500',
-      emoji: '💕'
+      emoji: '💕',
+      fullGuide: {
+        intro: '안정적인 애착은 평생의 정서 발달 기반이 돼요. 매일 10분씩이라도 아이와 집중해서 교감하면 충분해요.',
+        steps: [
+          { icon: '👀', title: '눈 맞추기', desc: '수유, 기저귀 교체 시 아이 눈을 바라보며 말 걸어요' },
+          { icon: '🤗', title: '스킨십 하기', desc: '안아주기, 뽀뽀, 마사지로 피부 접촉을 늘려요' },
+          { icon: '🗣️', title: '반응해 주기', desc: '아이 옹알이에 같은 톤으로 대답해줘요' },
+          { icon: '🎭', title: '표정 놀이', desc: '웃기, 놀란 척, 슬픈 척 다양한 표정을 보여줘요' },
+          { icon: '📖', title: '함께 읽기', desc: '그림책을 보며 손가락으로 가리키고 이야기해요' }
+        ],
+        tips: ['양보다 질! 10분이라도 집중해서', '아이가 외면해도 기다려주세요', '아빠와의 애착도 중요해요'],
+        relatedQuestion: '애착 형성 어떻게 해야 해요?'
+      }
     },
     {
       id: 'psych-2',
       title: '떼쓰기 대응 전략',
       description: '감정 코칭으로 아이의 마음을 읽어요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3997/3997872.png',
       gradient: 'from-purple-400 to-pink-500',
-      emoji: '🧠'
+      emoji: '🧠',
+      fullGuide: {
+        intro: '떼쓰기는 아이가 감정을 조절하는 법을 배우는 과정이에요. 훈육이 아닌 감정 코칭이 필요한 시기예요.',
+        steps: [
+          { icon: '🧘', title: '부모 먼저 진정', desc: '심호흡하고, 나도 감정 조절이 먼저예요' },
+          { icon: '👂', title: '감정 인정', desc: '"화가 났구나", "속상했구나" 먼저 공감해요' },
+          { icon: '🤲', title: '안전하게 기다리기', desc: '위험한 물건 치우고, 아이가 진정될 때까지 옆에 있어요' },
+          { icon: '💬', title: '대화하기', desc: '진정 후 "왜 화났어?" 부드럽게 물어봐요' },
+          { icon: '💡', title: '대안 제시', desc: '"다음엔 이렇게 말해볼까?" 방법을 알려줘요' }
+        ],
+        tips: ['떼쓸 때 요구를 들어주면 학습돼요', '공공장소에서도 일관되게 대응해요', '사후에 칭찬하는 것이 중요해요'],
+        relatedQuestion: '아이가 떼쓸 때 어떻게 해요?'
+      }
     },
     {
       id: 'psych-3',
       title: '분리불안 극복하기',
       description: '작은 이별 연습으로 자신감을 키워요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/4213/4213732.png',
       gradient: 'from-fuchsia-400 to-purple-500',
-      emoji: '🤗'
+      emoji: '🤗',
+      fullGuide: {
+        intro: '분리불안은 애착이 잘 형성되었다는 증거예요. 보통 8-14개월에 심하고, 점차 나아져요. 연습이 필요해요.',
+        steps: [
+          { icon: '👋', title: '이별 의식 만들기', desc: '"엄마 금방 올게, 뽀뽀!" 짧은 인사말을 정해요' },
+          { icon: '⏱️', title: '짧은 이별부터', desc: '5분 → 10분 → 30분 점차 시간을 늘려요' },
+          { icon: '🧸', title: '애착 물건 주기', desc: '엄마 냄새 배인 손수건이나 인형을 줘요' },
+          { icon: '🚪', title: '몰래 사라지지 않기', desc: '갑자기 사라지면 불안이 커져요, 꼭 인사해요' },
+          { icon: '🎉', title: '돌아와서 환영', desc: '"엄마 왔어! 잘 기다렸네" 크게 환영해줘요' }
+        ],
+        tips: ['처음엔 5분도 어려워요, 천천히', '어린이집 적응도 같은 방법으로', '아이가 울어도 돌아가지 마세요'],
+        relatedQuestion: '분리불안이 심해요'
+      }
     }
   ],
   DEVELOPMENT: [
@@ -159,25 +255,57 @@ export const ILLUSTRATION_CARDS = {
       id: 'dev-1',
       title: '월령별 발달 체크',
       description: '아이의 성장 마일스톤을 확인해보세요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3997/3997593.png',
       gradient: 'from-green-400 to-emerald-500',
-      emoji: '📊'
+      emoji: '📊',
+      fullGuide: {
+        intro: '모든 아이는 자기만의 속도로 자라요. 발달 이정표는 참고용이며, 1-2개월 차이는 정상 범위예요.',
+        steps: [
+          { icon: '👶', title: '0-3개월', desc: '고개 가누기, 눈 맞추기, 손에 물건 쥐기' },
+          { icon: '🔄', title: '4-6개월', desc: '뒤집기, 손으로 물건 잡기, 옹알이 시작' },
+          { icon: '🐛', title: '7-9개월', desc: '배밀이/기기, 앉기, "엄마" 소리 흉내' },
+          { icon: '🧍', title: '10-12개월', desc: '붙잡고 서기, 걸음마 시도, 간단한 말 이해' }
+        ],
+        tips: ['비교보다 아이의 변화에 집중해요', '걱정되면 소아과 상담하세요', '많이 놀아주는 게 최고의 자극이에요'],
+        relatedQuestion: '우리 아이 발달이 늦은 거 아닐까요?'
+      }
     },
     {
       id: 'dev-2',
       title: '터미타임 가이드',
       description: '목과 등 근육 발달을 도와주는 놀이',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/2964/2964514.png',
       gradient: 'from-lime-400 to-green-500',
-      emoji: '💪'
+      emoji: '💪',
+      fullGuide: {
+        intro: '터미타임(엎드려 놀기)은 목, 어깨, 등 근육을 강화해 뒤집기와 기기의 기초가 돼요. 매일 조금씩 연습해요.',
+        steps: [
+          { icon: '🕐', title: '시간 정하기', desc: '수유 30분 후, 기분 좋을 때 시작해요' },
+          { icon: '🛋️', title: '자세 잡기', desc: '평평한 매트 위에 배를 대고 엎드려요' },
+          { icon: '🧸', title: '흥미 유발', desc: '눈높이에 장난감 두고 고개 들도록 유도해요' },
+          { icon: '⏱️', title: '시간 조절', desc: '처음 1-2분 → 점차 5분으로 늘려가요' },
+          { icon: '👏', title: '격려하기', desc: '고개 들면 "잘했어!" 크게 칭찬해요' }
+        ],
+        tips: ['울면 바로 중단하고 다음에 다시', '하루 총 20-30분을 목표로', '엄마 배 위에서 시작해도 좋아요'],
+        relatedQuestion: '터미타임 어떻게 해요?'
+      }
     },
     {
       id: 'dev-3',
       title: '소근육 발달 놀이',
       description: '손가락 힘을 키우는 재미있는 활동',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3468/3468377.png',
       gradient: 'from-emerald-400 to-green-500',
-      emoji: '✋'
+      emoji: '✋',
+      fullGuide: {
+        intro: '소근육은 손가락을 정교하게 움직이는 능력이에요. 이후 젓가락질, 글씨 쓰기의 기초가 되니 놀이로 발달시켜요.',
+        steps: [
+          { icon: '🧱', title: '블록 쌓기', desc: '큰 블록부터 시작해 점점 작은 것으로' },
+          { icon: '📦', title: '용기 놀이', desc: '뚜껑 열고 닫기, 공 넣고 빼기' },
+          { icon: '🎨', title: '핑거 페인팅', desc: '안전한 물감으로 손가락 그림 그리기' },
+          { icon: '🥢', title: '집기 연습', desc: '큰 뻥튀기나 과자 집어서 입에 넣기' },
+          { icon: '📄', title: '종이 놀이', desc: '종이 찢기, 구기기로 손 힘 기르기' }
+        ],
+        tips: ['작은 물건은 삼킴 주의', '매일 10분씩 다양한 놀이를', '숟가락 쥐기도 좋은 연습이에요'],
+        relatedQuestion: '소근육 발달 놀이 추천해주세요'
+      }
     }
   ],
   POOP: [
@@ -185,25 +313,58 @@ export const ILLUSTRATION_CARDS = {
       id: 'poop-1',
       title: '배변 훈련 시작 신호',
       description: '아이가 준비된 신호를 확인해보세요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3468/3468292.png',
       gradient: 'from-amber-400 to-orange-500',
-      emoji: '🚽'
+      emoji: '🚽',
+      fullGuide: {
+        intro: '배변 훈련은 보통 18-24개월에 시작해요. 하지만 아이가 준비됐다는 신호를 보여야 성공률이 높아요.',
+        steps: [
+          { icon: '⏰', title: '기저귀 체크', desc: '2시간 이상 기저귀가 마른 상태로 있어요' },
+          { icon: '🚶', title: '행동 신호', desc: '배변 시 숨거나 특정 자세를 취해요' },
+          { icon: '💬', title: '언어 표현', desc: '"쉬" "응가" 등 배변 관련 단어를 알아요' },
+          { icon: '👖', title: '옷 벗기', desc: '혼자 바지를 내릴 수 있어요' },
+          { icon: '😣', title: '불편함 표현', desc: '기저귀가 젖으면 불편해해요' }
+        ],
+        tips: ['3가지 이상 해당되면 시작해도 OK', '동생이 태어나면 잠시 미뤄도 돼요', '아이가 거부하면 1-2개월 후 다시'],
+        relatedQuestion: '배변 훈련 언제 시작해요?'
+      }
     },
     {
       id: 'poop-2',
       title: '변기 친해지기 놀이',
       description: '재미있는 변기 탐색 시간을 가져요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3468/3468215.png',
       gradient: 'from-yellow-400 to-amber-500',
-      emoji: '🎮'
+      emoji: '🎮',
+      fullGuide: {
+        intro: '변기는 아이에게 무서운 존재일 수 있어요. 강요 없이 변기와 친해지는 시간을 먼저 가져요.',
+        steps: [
+          { icon: '🛒', title: '함께 고르기', desc: '아이와 함께 좋아하는 캐릭터 유아 변기 고르기' },
+          { icon: '🧸', title: '인형 놀이', desc: '인형이 변기에 앉는 시범을 보여줘요' },
+          { icon: '👕', title: '옷 입고 앉기', desc: '처음엔 옷 입은 채로 변기에 앉아보기만' },
+          { icon: '📚', title: '변기 그림책', desc: '변기 관련 그림책을 함께 읽어요' },
+          { icon: '🎵', title: '노래 부르기', desc: '변기에 앉아서 좋아하는 노래 부르기' }
+        ],
+        tips: ['절대 강요하지 마세요', '하루 5분씩 변기에 앉는 연습', '배변 성공하면 크게 칭찬해요'],
+        relatedQuestion: '아이가 변기를 무서워해요'
+      }
     },
     {
       id: 'poop-3',
       title: '기저귀 졸업 응원',
       description: '칭찬과 격려로 성공 경험을 쌓아요',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3468/3468550.png',
       gradient: 'from-orange-400 to-yellow-500',
-      emoji: '🎉'
+      emoji: '🎉',
+      fullGuide: {
+        intro: '기저귀 졸업은 아이의 큰 성장이에요. 실수해도 절대 혼내지 말고, 작은 성공에 크게 칭찬해줘요.',
+        steps: [
+          { icon: '🩲', title: '팬티 입히기', desc: '낮에는 팬티, 밤에는 기저귀로 시작해요' },
+          { icon: '⏰', title: '규칙적으로 앉히기', desc: '기상 후, 식사 후, 외출 전 변기에 앉혀요' },
+          { icon: '🌟', title: '스티커 보상', desc: '성공할 때마다 스티커를 붙이게 해요' },
+          { icon: '💪', title: '실수에 담담하게', desc: '"괜찮아, 다음엔 더 잘할 수 있어" 격려해요' },
+          { icon: '🎊', title: '졸업식 하기', desc: '완전 성공하면 기저귀 졸업식 파티!' }
+        ],
+        tips: ['낮 훈련 성공 후 밤 기저귀 떼기', '외출 시 여분의 옷 꼭 챙기기', '퇴행해도 다그치지 마세요'],
+        relatedQuestion: '기저귀 떼는 법 알려주세요'
+      }
     }
   ],
   GENERAL: [
@@ -211,17 +372,39 @@ export const ILLUSTRATION_CARDS = {
       id: 'gen-1',
       title: '육아 꿀팁 모음',
       description: '초보 부모를 위한 알찬 정보',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/3997/3997761.png',
       gradient: 'from-blue-400 to-purple-500',
-      emoji: '💡'
+      emoji: '💡',
+      fullGuide: {
+        intro: '육아는 매일이 새로운 도전이에요. 작은 팁들이 모여 큰 도움이 됩니다. 경험에서 나온 꿀팁을 모아봤어요.',
+        steps: [
+          { icon: '📱', title: '기록 습관', desc: '수유, 수면, 기저귀 시간을 기록해두면 패턴이 보여요' },
+          { icon: '🧺', title: '미리 준비', desc: '외출 가방은 항상 문 앞에 준비해둬요' },
+          { icon: '🤝', title: '도움 요청', desc: '혼자 다 하려 하지 말고, 주변에 도움을 요청해요' },
+          { icon: '😴', title: '함께 자기', desc: '아이가 자면 엄마도 눈 붙여요, 집안일은 나중에' },
+          { icon: '💬', title: '소통하기', desc: '아이에게 말 걸기, 설명하기를 습관화해요' }
+        ],
+        tips: ['완벽하지 않아도 괜찮아요', '매일 조금씩 나아지면 돼요', '힘들면 쉬어가도 괜찮아요'],
+        relatedQuestion: '육아가 처음이라 막막해요'
+      }
     },
     {
       id: 'gen-2',
       title: '부모 힐링 가이드',
       description: '지친 마음을 위로하는 시간',
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/4213/4213618.png',
       gradient: 'from-rose-400 to-pink-500',
-      emoji: '☕'
+      emoji: '☕',
+      fullGuide: {
+        intro: '좋은 부모가 되려면 먼저 내가 건강해야 해요. 지친 마음을 돌보는 것도 중요한 육아의 일부예요.',
+        steps: [
+          { icon: '🧘', title: '5분 명상', desc: '아이 낮잠 시간에 눈 감고 심호흡 5분' },
+          { icon: '☕', title: '나만의 시간', desc: '따뜻한 음료 한 잔의 여유를 가져요' },
+          { icon: '📞', title: '대화 나누기', desc: '친구나 가족과 통화하며 스트레스 해소' },
+          { icon: '📝', title: '감정 일기', desc: '오늘 힘들었던 일, 기뻤던 일 적어보기' },
+          { icon: '🌙', title: '수면 관리', desc: '가능하면 아이와 함께 일찍 자기' }
+        ],
+        tips: ['죄책감 갖지 마세요, 쉬는 것도 필요해요', '완벽한 부모는 없어요', '지금 이 순간 최선을 다하고 있어요'],
+        relatedQuestion: '육아가 너무 힘들어요'
+      }
     }
   ]
 };

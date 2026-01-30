@@ -27,6 +27,12 @@ export default function App() {
     gradient: string;
     category: string;
     tips?: string[];
+    fullGuide?: {
+      intro: string;
+      steps: { icon: string; title: string; desc: string; }[];
+      tips: string[];
+      relatedQuestion: string;
+    };
   } | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -137,15 +143,20 @@ export default function App() {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedGuide(null)}
           />
-          <div className="relative w-full max-w-md bg-white rounded-t-[40px] shadow-2xl animate-slide-up overflow-hidden">
-            {/* 헤더 이미지 */}
-            <div className={`relative h-44 bg-gradient-to-br ${selectedGuide.gradient} overflow-hidden`}>
+          <div className="relative w-full max-w-md bg-white rounded-t-[32px] shadow-2xl animate-slide-up overflow-hidden max-h-[85vh] flex flex-col">
+            {/* 드래그 핸들 */}
+            <div className="flex justify-center pt-3 pb-1 bg-white shrink-0">
+              <div className="w-10 h-1 bg-gray-200 rounded-full"></div>
+            </div>
+            
+            {/* 헤더 */}
+            <div className={`relative h-32 bg-gradient-to-br ${selectedGuide.gradient} overflow-hidden shrink-0`}>
               <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_50%,white_0%,transparent_60%)]"></div>
-              <div className="absolute right-6 bottom-4 text-[100px] opacity-90 drop-shadow-xl">
+              <div className="absolute right-4 bottom-2 text-[70px] opacity-90 drop-shadow-lg">
                 {selectedGuide.emoji}
               </div>
-              <div className="absolute top-4 left-5">
-                <span className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/25 text-white backdrop-blur-sm border border-white/20">
+              <div className="absolute top-3 left-4">
+                <span className="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/25 text-white backdrop-blur-sm border border-white/20">
                   {selectedGuide.category === 'SLEEP' ? '💤 수면' : 
                    selectedGuide.category === 'NUTRITION' ? '🥣 영양' : 
                    selectedGuide.category === 'PSYCHOLOGY' ? '🧠 심리' : 
@@ -155,39 +166,102 @@ export default function App() {
               </div>
               <button 
                 onClick={() => setSelectedGuide(null)}
-                className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                className="absolute top-3 right-3 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
               </button>
             </div>
             
-            {/* 콘텐츠 */}
-            <div className="p-6 pb-10">
-              <h2 className="text-[20px] font-black text-[#222] mb-3">{selectedGuide.title}</h2>
-              <p className="text-[14px] text-gray-600 leading-relaxed mb-6">{selectedGuide.description}</p>
-              
-              {/* 팁 목록 */}
-              <div className="space-y-3 mb-6">
-                {selectedGuide.tips?.map((tip, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-2xl">
-                    <span className="text-lg">{i === 0 ? '✅' : '💡'}</span>
-                    <p className="text-[13px] text-gray-700 leading-relaxed">{tip}</p>
-                  </div>
-                ))}
+            {/* 스크롤 가능한 콘텐츠 */}
+            <div className="flex-1 overflow-y-auto hide-scrollbar">
+              <div className="p-5 pb-6">
+                <h2 className="text-[18px] font-black text-[#222] mb-2">{selectedGuide.title}</h2>
+                
+                {/* 상세 가이드가 있는 경우 */}
+                {selectedGuide.fullGuide ? (
+                  <>
+                    {/* 인트로 */}
+                    <p className="text-[13px] text-gray-600 leading-relaxed mb-5 bg-gray-50 p-3 rounded-xl">
+                      {selectedGuide.fullGuide.intro}
+                    </p>
+                    
+                    {/* 단계별 가이드 */}
+                    <div className="mb-5">
+                      <h3 className="text-[12px] font-black text-gray-400 uppercase tracking-wider mb-3">📋 실천 가이드</h3>
+                      <div className="space-y-2.5">
+                        {selectedGuide.fullGuide.steps.map((step, i) => (
+                          <div key={i} className="flex items-start gap-3 p-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-lg shrink-0">
+                              {step.icon}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-[13px] font-bold text-[#333] mb-0.5">{step.title}</h4>
+                              <p className="text-[11px] text-gray-500 leading-snug">{step.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* 팁 */}
+                    <div className="mb-5">
+                      <h3 className="text-[12px] font-black text-gray-400 uppercase tracking-wider mb-3">💡 꿀팁</h3>
+                      <div className="bg-gradient-to-r from-amber-50 to-yellow-50 p-3 rounded-xl border border-amber-100">
+                        <ul className="space-y-1.5">
+                          {selectedGuide.fullGuide.tips.map((tip, i) => (
+                            <li key={i} className="flex items-start gap-2 text-[12px] text-gray-700">
+                              <span className="text-amber-500 mt-0.5">•</span>
+                              <span>{tip}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* 관련 질문 버튼 */}
+                    <button 
+                      onClick={() => {
+                        setInputText(selectedGuide.fullGuide?.relatedQuestion || '');
+                        setSelectedGuide(null);
+                        setActiveTab('CHATS');
+                        setTimeout(() => inputRef.current?.focus(), 100);
+                      }}
+                      className="w-full py-3.5 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white font-bold text-[13px] rounded-xl shadow-lg shadow-blue-200/50 active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                      </svg>
+                      "{selectedGuide.fullGuide.relatedQuestion}" 질문하기
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* 기본 팁 목록 (fullGuide가 없는 경우) */}
+                    <p className="text-[13px] text-gray-600 leading-relaxed mb-4">{selectedGuide.description}</p>
+                    <div className="space-y-2 mb-5">
+                      {selectedGuide.tips?.map((tip, i) => (
+                        <div key={i} className="flex items-start gap-2.5 p-3 bg-gray-50 rounded-xl">
+                          <span className="text-base">{i === 0 ? '✅' : '💡'}</span>
+                          <p className="text-[12px] text-gray-700 leading-relaxed">{tip}</p>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* 액션 버튼 */}
+                    <button 
+                      onClick={() => {
+                        setSelectedGuide(null);
+                        setActiveTab('CHATS');
+                      }}
+                      className="w-full py-3.5 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white font-bold text-[13px] rounded-xl shadow-lg shadow-blue-200/50 active:scale-[0.98] transition-transform"
+                    >
+                      AI 코치에게 더 물어보기 →
+                    </button>
+                  </>
+                )}
               </div>
-              
-              {/* 액션 버튼 */}
-              <button 
-                onClick={() => {
-                  setSelectedGuide(null);
-                  setActiveTab('CHATS');
-                }}
-                className="w-full py-4 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white font-bold rounded-2xl shadow-lg shadow-blue-200/50 active:scale-[0.98] transition-transform"
-              >
-                AI 코치에게 더 물어보기 →
-              </button>
             </div>
           </div>
         </div>
@@ -264,21 +338,22 @@ export default function App() {
                           {msg.tips.slice(0, 2).map((tip, tIdx) => {
                             const category = tip.category || COACH_TO_CATEGORY[msg.coachId || 'ROUTER'] || 'GENERAL';
                             const illustrationCards = ILLUSTRATION_CARDS[category as keyof typeof ILLUSTRATION_CARDS] || ILLUSTRATION_CARDS.GENERAL;
-                            const illustCard = illustrationCards[tIdx % illustrationCards.length];
+                            const illustCard = illustrationCards[tIdx % illustrationCards.length] as any;
                             
                             return (
                               <div 
                                 key={tIdx} 
                                 onClick={() => setSelectedGuide({
-                                  title: tip.title,
-                                  description: tip.description,
-                                  emoji: (illustCard as any).emoji || tip.icon,
+                                  title: illustCard.title || tip.title,
+                                  description: illustCard.description || tip.description,
+                                  emoji: illustCard.emoji || tip.icon,
                                   gradient: illustCard.gradient,
                                   category: category,
                                   tips: [
                                     '✓ ' + tip.description,
                                     '💡 관련된 다른 팁들도 AI 코치에게 물어보세요!'
-                                  ]
+                                  ],
+                                  fullGuide: illustCard.fullGuide
                                 })}
                                 className="w-full bg-white rounded-2xl p-3 shadow-sm border border-gray-50 fade-in cursor-pointer hover:shadow-md hover:border-gray-100 transition-all active:scale-[0.98]"
                               >
@@ -316,19 +391,20 @@ export default function App() {
                           return (
                             <div className="mt-3 overflow-x-auto hide-scrollbar w-full">
                               <div className="flex gap-2 pb-1" style={{ minWidth: 'min-content' }}>
-                                {relatedCards.slice(0, 3).map((card) => (
+                                {relatedCards.slice(0, 3).map((card: any) => (
                                   <button 
                                     key={card.id}
                                     onClick={() => setSelectedGuide({
                                       title: card.title,
                                       description: card.description,
-                                      emoji: (card as any).emoji || '📚',
+                                      emoji: card.emoji || '📚',
                                       gradient: card.gradient,
                                       category: mainCategory,
                                       tips: [
                                         '📖 ' + card.description,
                                         '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
-                                      ]
+                                      ],
+                                      fullGuide: card.fullGuide
                                     })}
                                     className="flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
                                   >
@@ -626,6 +702,10 @@ export default function App() {
                     <div className="grid grid-cols-1 gap-4">
                       {recentTips.map((tip, i) => {
                         const coach = COACHES.find(c => c.id === tip.coachId);
+                        const category = tip.category || COACH_TO_CATEGORY[tip.coachId || 'ROUTER'] || 'GENERAL';
+                        const categoryCards = ILLUSTRATION_CARDS[category as keyof typeof ILLUSTRATION_CARDS] || ILLUSTRATION_CARDS.GENERAL;
+                        const matchingCard = categoryCards.find((c: any) => c.title.includes(tip.title.split(' ')[0])) || categoryCards[0];
+                        
                         return (
                           <button 
                             key={i} 
@@ -636,11 +716,12 @@ export default function App() {
                               gradient: coach?.bgColor?.includes('gradient') 
                                 ? coach.bgColor.replace('linear-gradient(135deg, ', 'from-').replace(',', ' to-').replace(')', '') 
                                 : 'from-blue-400 to-purple-500',
-                              category: tip.category || 'GENERAL',
+                              category: category,
                               tips: [
                                 `📖 ${tip.description}`,
                                 coach ? `💬 ${coach.name} 코치의 조언이에요!` : '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
-                              ]
+                              ],
+                              fullGuide: (matchingCard as any)?.fullGuide
                             })}
                             className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50 text-left active:scale-[0.98] transition-all"
                           >
