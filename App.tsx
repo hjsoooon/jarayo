@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { COACHES } from './constants';
+import { COACHES, ILLUSTRATION_CARDS, COACH_TO_CATEGORY } from './constants';
 import { Message, CoachRole, AppTab, ChecklistItem, InsightReport } from './types';
 import { getGeminiResponse } from './geminiService';
 
@@ -20,6 +20,14 @@ export default function App() {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [selectedGuide, setSelectedGuide] = useState<{
+    title: string;
+    description: string;
+    emoji: string;
+    gradient: string;
+    category: string;
+    tips?: string[];
+  } | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -53,6 +61,14 @@ export default function App() {
       { label: '수', value: 85, compareText: '최고' }, { label: '목', value: 40, compareText: '-15%' },
       { label: '금', value: 65, compareText: '+20%' }, { label: '토', value: 95, compareText: '달성' },
       { label: '일', value: 75, compareText: '유지' }
+    ],
+    growthMetrics: [
+      { id: 'sleep', icon: '😴', label: '총 수면', value: '14.5', unit: '시간', progress: 90, status: 'good', trend: 'up', trendText: '+30분' },
+      { id: 'feed', icon: '🍼', label: '수유량', value: '850', unit: 'ml', progress: 85, status: 'good', trend: 'stable', trendText: '유지중' },
+      { id: 'tummy', icon: '💪', label: '터미타임', value: '15', unit: '분', progress: 75, status: 'normal', trend: 'up', trendText: '+5분' },
+      { id: 'poop', icon: '💩', label: '배변', value: '5', unit: '회', progress: 100, status: 'good', trend: 'stable', trendText: '정상' },
+      { id: 'weight', icon: '⚖️', label: '체중', value: '5.2', unit: 'kg', progress: 80, status: 'good', trend: 'up', trendText: '+150g' },
+      { id: 'mood', icon: '😊', label: '기분', value: '좋음', unit: '', progress: 95, status: 'good', trend: 'up', trendText: '안정적' }
     ]
   });
 
@@ -113,6 +129,69 @@ export default function App() {
   return (
     <div className="max-w-md mx-auto h-[100dvh] bg-[#FDFBFA] flex flex-col relative overflow-hidden shadow-2xl">
       {showConfetti && <ConfettiEffect />}
+      
+      {/* 가이드 상세 보기 모달 */}
+      {selectedGuide && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center">
+          <div 
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setSelectedGuide(null)}
+          />
+          <div className="relative w-full max-w-md bg-white rounded-t-[40px] shadow-2xl animate-slide-up overflow-hidden">
+            {/* 헤더 이미지 */}
+            <div className={`relative h-44 bg-gradient-to-br ${selectedGuide.gradient} overflow-hidden`}>
+              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_50%,white_0%,transparent_60%)]"></div>
+              <div className="absolute right-6 bottom-4 text-[100px] opacity-90 drop-shadow-xl">
+                {selectedGuide.emoji}
+              </div>
+              <div className="absolute top-4 left-5">
+                <span className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/25 text-white backdrop-blur-sm border border-white/20">
+                  {selectedGuide.category === 'SLEEP' ? '💤 수면' : 
+                   selectedGuide.category === 'NUTRITION' ? '🥣 영양' : 
+                   selectedGuide.category === 'PSYCHOLOGY' ? '🧠 심리' : 
+                   selectedGuide.category === 'DEVELOPMENT' ? '🌱 발달' : 
+                   selectedGuide.category === 'POOP' ? '🚽 배변' : '💡 팁'}
+                </span>
+              </div>
+              <button 
+                onClick={() => setSelectedGuide(null)}
+                className="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            
+            {/* 콘텐츠 */}
+            <div className="p-6 pb-10">
+              <h2 className="text-[20px] font-black text-[#222] mb-3">{selectedGuide.title}</h2>
+              <p className="text-[14px] text-gray-600 leading-relaxed mb-6">{selectedGuide.description}</p>
+              
+              {/* 팁 목록 */}
+              <div className="space-y-3 mb-6">
+                {selectedGuide.tips?.map((tip, i) => (
+                  <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-2xl">
+                    <span className="text-lg">{i === 0 ? '✅' : '💡'}</span>
+                    <p className="text-[13px] text-gray-700 leading-relaxed">{tip}</p>
+                  </div>
+                ))}
+              </div>
+              
+              {/* 액션 버튼 */}
+              <button 
+                onClick={() => {
+                  setSelectedGuide(null);
+                  setActiveTab('CHATS');
+                }}
+                className="w-full py-4 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white font-bold rounded-2xl shadow-lg shadow-blue-200/50 active:scale-[0.98] transition-transform"
+              >
+                AI 코치에게 더 물어보기 →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex-1 overflow-hidden flex flex-col">
         {activeTab === 'CHATS' ? (
@@ -178,18 +257,88 @@ export default function App() {
                       {msg.content}
                     </div>
                     {msg.tips && (
-                      <div className="w-full space-y-4 mt-5">
-                        {msg.tips.map((tip, tIdx) => (
-                          <div key={tIdx} className="w-[94%] bg-white rounded-[32px] overflow-hidden shadow-xl border border-gray-50 fade-in group">
-                            <div className="p-6">
-                              <div className="flex items-center gap-2 mb-3">
-                                <div className="w-8 h-8 rounded-2xl bg-gray-50 flex items-center justify-center text-lg">{tip.icon}</div>
-                                <h4 className="text-[16px] font-black text-[#222]">{tip.title}</h4>
+                      <div className="w-full mt-4">
+                        {/* 컴팩트한 팁 카드 */}
+                        <div className="space-y-2">
+                          {msg.tips.slice(0, 2).map((tip, tIdx) => {
+                            const category = tip.category || COACH_TO_CATEGORY[msg.coachId || 'ROUTER'] || 'GENERAL';
+                            const illustrationCards = ILLUSTRATION_CARDS[category as keyof typeof ILLUSTRATION_CARDS] || ILLUSTRATION_CARDS.GENERAL;
+                            const illustCard = illustrationCards[tIdx % illustrationCards.length];
+                            
+                            return (
+                              <div 
+                                key={tIdx} 
+                                onClick={() => setSelectedGuide({
+                                  title: tip.title,
+                                  description: tip.description,
+                                  emoji: (illustCard as any).emoji || tip.icon,
+                                  gradient: illustCard.gradient,
+                                  category: category,
+                                  tips: [
+                                    '✓ ' + tip.description,
+                                    '💡 관련된 다른 팁들도 AI 코치에게 물어보세요!'
+                                  ]
+                                })}
+                                className="w-[94%] bg-white rounded-2xl p-4 shadow-sm border border-gray-50 fade-in cursor-pointer hover:shadow-md hover:border-gray-100 transition-all active:scale-[0.98]"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${illustCard.gradient} flex items-center justify-center text-2xl shrink-0`}>
+                                    {(illustCard as any).emoji || tip.icon}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                      <h4 className="text-[13px] font-bold text-[#222] truncate">{tip.title}</h4>
+                                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                                        tip.type === 'SUCCESS' ? 'bg-green-50 text-green-600' : 
+                                        tip.type === 'WARNING' ? 'bg-amber-50 text-amber-600' : 
+                                        'bg-blue-50 text-blue-600'
+                                      }`}>
+                                        {tip.type === 'SUCCESS' ? '추천' : tip.type === 'WARNING' ? '주의' : '참고'}
+                                      </span>
+                                    </div>
+                                    <p className="text-[11px] text-gray-500 line-clamp-1">{tip.description}</p>
+                                  </div>
+                                  <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                                  </svg>
+                                </div>
                               </div>
-                              <p className="text-[13px] font-medium text-[#666] leading-relaxed">{tip.description}</p>
+                            );
+                          })}
+                        </div>
+                        
+                        {/* 관련 가이드 (간소화) */}
+                        {(() => {
+                          const mainCategory = msg.tips[0]?.category || COACH_TO_CATEGORY[msg.coachId || 'ROUTER'] || 'GENERAL';
+                          const relatedCards = ILLUSTRATION_CARDS[mainCategory as keyof typeof ILLUSTRATION_CARDS] || ILLUSTRATION_CARDS.GENERAL;
+                          
+                          return (
+                            <div className="mt-3 overflow-x-auto hide-scrollbar">
+                              <div className="flex gap-2" style={{ width: 'max-content' }}>
+                                {relatedCards.slice(0, 3).map((card) => (
+                                  <button 
+                                    key={card.id}
+                                    onClick={() => setSelectedGuide({
+                                      title: card.title,
+                                      description: card.description,
+                                      emoji: (card as any).emoji || '📚',
+                                      gradient: card.gradient,
+                                      category: mainCategory,
+                                      tips: [
+                                        '📖 ' + card.description,
+                                        '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
+                                      ]
+                                    })}
+                                    className="flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
+                                  >
+                                    <span className="text-base">{(card as any).emoji || '📚'}</span>
+                                    <span className="text-[11px] font-medium text-gray-600 whitespace-nowrap">{card.title}</span>
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })()}
                       </div>
                     )}
                   </div>
@@ -249,58 +398,253 @@ export default function App() {
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden bg-[#F8F9FD] tab-content-enter">
             <header className="bg-white px-7 pt-12 pb-8 rounded-b-[48px] shadow-sm z-20">
-              <div className="flex items-center justify-between mb-10">
+              <div className="flex items-center justify-between mb-8">
                 <div className="flex flex-col">
-                   <span className="text-[11px] font-black text-blue-500 uppercase tracking-[0.3em] mb-1 mono">Intelligence</span>
-                   <h1 className="text-[28px] font-black outfit text-[#222] tracking-tighter">Report Hub</h1>
+                   <span className="text-[11px] font-black text-blue-500 uppercase tracking-[0.3em] mb-1 mono">Chat Report</span>
+                   <h1 className="text-[28px] font-black outfit text-[#222] tracking-tighter">상담 리포트</h1>
                 </div>
-                <div className="bg-gray-50 p-1.5 rounded-[22px] flex gap-1 border border-gray-100">
-                  {(['DAILY', 'WEEKLY', 'MONTHLY'] as const).map(t => (
-                    <button key={t} onClick={() => setTimeFilter(t)} className={`px-4 py-2 rounded-[18px] text-[11px] font-black transition-all ${timeFilter === t ? 'bg-white text-[#7EA1FF] shadow-md border border-gray-50' : 'text-gray-400'}`}>{t === 'DAILY' ? '일간' : t === 'WEEKLY' ? '주간' : '월간'}</button>
-                  ))}
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7EA1FF] to-[#A29BFE] flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">📊</span>
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-7 rounded-[40px] text-white shadow-2xl relative overflow-hidden group">
-                <div className="absolute -right-6 -bottom-6 text-[120px] opacity-15 transform rotate-12">{insightData.statusIcon}</div>
-                <div className="relative z-10">
-                   <div className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/30 mb-4 inline-block">Insight Today</div>
-                   <h2 className="text-[19px] font-black leading-snug tracking-tight mb-4 pr-10">{insightData.summary}</h2>
-                   <div className="flex items-center gap-2 text-white/80"><span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span><span className="text-[11px] font-bold">민준이의 성장 지표가 안정적입니다</span></div>
-                </div>
-              </div>
+              {/* 채팅 요약 카드 */}
+              {(() => {
+                const userMessages = messages.filter(m => m.role === 'user');
+                const assistantMessages = messages.filter(m => m.role === 'assistant');
+                const lastAssistant = assistantMessages[assistantMessages.length - 1];
+                const lastCoach = lastAssistant?.coachId ? COACHES.find(c => c.id === lastAssistant.coachId) : null;
+                
+                return (
+                  <div className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-6 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
+                    <div className="absolute -right-4 -bottom-4 text-[100px] opacity-10">💬</div>
+                    <div className="relative z-10">
+                      {userMessages.length > 0 ? (
+                        <>
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/30">
+                              최근 상담
+                            </div>
+                            {lastCoach && (
+                              <div className="px-2 py-1 bg-white/15 rounded-lg text-[10px] font-bold flex items-center gap-1">
+                                <span>{lastCoach.avatar}</span>
+                                <span>{lastCoach.name} 코치</span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-[16px] font-bold leading-relaxed mb-3 line-clamp-2">
+                            "{userMessages[userMessages.length - 1]?.content}"
+                          </p>
+                          <div className="flex items-center gap-2 text-white/80">
+                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                            <span className="text-[11px] font-bold">총 {userMessages.length}개의 질문에 답변 완료</span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/30 mb-3 inline-block">
+                            시작하기
+                          </div>
+                          <p className="text-[17px] font-bold leading-relaxed mb-3">
+                            AI 코치에게 첫 질문을 해보세요! 🎉
+                          </p>
+                          <div className="flex items-center gap-2 text-white/80">
+                            <span className="text-[11px] font-bold">수면, 이유식, 발달, 심리, 배변 무엇이든 물어보세요</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
             </header>
 
             <div className="flex-1 overflow-y-auto hide-scrollbar p-7 space-y-10 pb-20">
               <section className="fade-in">
-                <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Vital Trends</h3>
-                <div className="bg-white p-7 rounded-[40px] shadow-sm border border-gray-50 overflow-hidden">
-                  <div className="flex items-end justify-between h-28 gap-2">
-                    {insightData.trends.map((t, i) => (
-                      <div key={i} className="flex flex-col items-center flex-1 gap-3">
-                        <div className="w-full bg-gray-50 rounded-2xl h-24 relative overflow-hidden">
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#7EA1FF] to-[#A29BFE] transition-all duration-1000 ease-out" style={{ height: `${t.value}%`, opacity: t.value > 80 ? 1 : 0.4 }}></div>
+                <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Chat Insights</h3>
+                {(() => {
+                  // 채팅 메시지 분석
+                  const assistantMessages = messages.filter(m => m.role === 'assistant');
+                  const totalChats = messages.filter(m => m.role === 'user').length;
+                  
+                  // 코치별 상담 횟수 계산
+                  const coachStats: Record<string, number> = {};
+                  assistantMessages.forEach(m => {
+                    if (m.coachId) {
+                      coachStats[m.coachId] = (coachStats[m.coachId] || 0) + 1;
+                    }
+                  });
+                  
+                  // 가장 많이 상담한 코치 찾기
+                  const topCoaches = Object.entries(coachStats)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5);
+                  
+                  const maxCount = topCoaches[0]?.[1] || 1;
+                  
+                  return (
+                    <div className="space-y-4">
+                      {/* 총 상담 통계 */}
+                      <div className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7EA1FF] to-[#A29BFE] flex items-center justify-center text-2xl text-white">
+                              💬
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-bold text-gray-400">총 상담 횟수</p>
+                              <p className="text-[28px] font-black text-[#222] leading-tight">{totalChats}<span className="text-[14px] text-gray-400 ml-1">회</span></p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-[10px] font-bold text-gray-400">받은 답변</p>
+                            <p className="text-[18px] font-black text-[#7EA1FF]">{assistantMessages.length}개</p>
+                          </div>
                         </div>
-                        <span className="text-[10px] font-black text-gray-400 uppercase">{t.label}</span>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      
+                      {/* 코치별 상담 비율 */}
+                      <div className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50">
+                        <p className="text-[12px] font-black text-gray-500 mb-4">🏆 코치별 상담 현황</p>
+                        {topCoaches.length > 0 ? (
+                          <div className="space-y-3">
+                            {topCoaches.map(([coachId, count]) => {
+                              const coach = COACHES.find(c => c.id === coachId);
+                              if (!coach) return null;
+                              const percentage = Math.round((count / maxCount) * 100);
+                              return (
+                                <div key={coachId} className="flex items-center gap-3">
+                                  <div 
+                                    className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0"
+                                    style={{ background: coach.bgColor }}
+                                  >
+                                    {coach.avatar}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="flex items-center justify-between mb-1">
+                                      <span className="text-[12px] font-bold text-[#333]">{coach.name}</span>
+                                      <span className="text-[11px] font-black text-gray-400">{count}회</span>
+                                    </div>
+                                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                      <div 
+                                        className="h-full rounded-full transition-all duration-700"
+                                        style={{ 
+                                          width: `${percentage}%`,
+                                          background: coach.bgColor 
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="text-center py-6">
+                            <p className="text-3xl mb-2">🤔</p>
+                            <p className="text-[13px] text-gray-400 font-medium">아직 상담 내역이 없어요</p>
+                            <p className="text-[11px] text-gray-300 mt-1">AI 코치에게 질문해보세요!</p>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* 최근 상담 키워드 */}
+                      {assistantMessages.length > 0 && (
+                        <div className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50">
+                          <p className="text-[12px] font-black text-gray-500 mb-3">🔍 최근 관심 주제</p>
+                          <div className="flex flex-wrap gap-2">
+                            {(() => {
+                              const keywords: string[] = [];
+                              messages.filter(m => m.role === 'user').slice(-5).forEach(m => {
+                                if (m.content.includes('잠') || m.content.includes('수면')) keywords.push('수면');
+                                if (m.content.includes('이유식') || m.content.includes('먹') || m.content.includes('수유')) keywords.push('이유식');
+                                if (m.content.includes('울') || m.content.includes('떼') || m.content.includes('애착')) keywords.push('심리');
+                                if (m.content.includes('발달') || m.content.includes('뒤집') || m.content.includes('기어')) keywords.push('발달');
+                                if (m.content.includes('기저귀') || m.content.includes('배변') || m.content.includes('똥')) keywords.push('배변');
+                              });
+                              const uniqueKeywords = [...new Set(keywords)];
+                              if (uniqueKeywords.length === 0) uniqueKeywords.push('육아 전반');
+                              
+                              return uniqueKeywords.map((kw, i) => (
+                                <span 
+                                  key={i}
+                                  className="px-3 py-1.5 bg-gradient-to-r from-blue-50 to-purple-50 text-[11px] font-bold text-[#7EA1FF] rounded-xl border border-blue-100"
+                                >
+                                  #{kw}
+                                </span>
+                              ));
+                            })()}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </section>
 
               <section className="fade-in">
-                <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Expert Summaries</h3>
-                <div className="grid grid-cols-1 gap-5">
-                  {insightData.solutions.map((sol, i) => (
-                    <div key={i} onClick={() => navigateToCoach(sol.coachId)} className="bg-white p-6 rounded-[40px] shadow-sm border border-gray-50 group active:scale-[0.97] transition-all cursor-pointer">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shadow-inner" style={{ background: COACHES.find(c=>c.id===sol.coachId)?.bgColor }}>{COACHES.find(c=>c.id===sol.coachId)?.avatar}</div>
-                        <span className="text-[15px] font-black text-[#222]">{sol.title}</span>
+                <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Recent Tips</h3>
+                {(() => {
+                  // 최근 메시지에서 팁 수집
+                  const recentTips = messages
+                    .filter(m => m.role === 'assistant' && m.tips && m.tips.length > 0)
+                    .slice(-3)
+                    .flatMap(m => m.tips?.map(tip => ({ ...tip, coachId: m.coachId })) || [])
+                    .slice(-4);
+                  
+                  if (recentTips.length === 0) {
+                    return (
+                      <div className="bg-white p-8 rounded-[32px] shadow-sm border border-gray-50 text-center">
+                        <p className="text-4xl mb-3">💡</p>
+                        <p className="text-[14px] font-bold text-gray-400">아직 받은 팁이 없어요</p>
+                        <p className="text-[12px] text-gray-300 mt-1">AI 코치에게 질문하면 실천 팁을 받을 수 있어요!</p>
+                        <button 
+                          onClick={() => setActiveTab('CHATS')}
+                          className="mt-4 px-5 py-2.5 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white text-[12px] font-bold rounded-2xl shadow-lg"
+                        >
+                          질문하러 가기 →
+                        </button>
                       </div>
-                      <p className="text-[13px] text-gray-500 leading-relaxed mb-5 font-medium">{sol.summary}</p>
-                      <div className="flex flex-wrap gap-2">{sol.tags.map(tag => <span key={tag} className="px-3 py-1 bg-gray-50 text-[10px] font-black text-gray-400 rounded-xl">{tag}</span>)}</div>
+                    );
+                  }
+                  
+                  return (
+                    <div className="grid grid-cols-1 gap-4">
+                      {recentTips.map((tip, i) => {
+                        const coach = COACHES.find(c => c.id === tip.coachId);
+                        return (
+                          <div key={i} className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50">
+                            <div className="flex items-start gap-4">
+                              <div 
+                                className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0"
+                                style={{ background: coach?.bgColor || 'linear-gradient(135deg, #7EA1FF, #A29BFE)' }}
+                              >
+                                {tip.icon}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-[14px] font-black text-[#222]">{tip.title}</span>
+                                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md ${
+                                    tip.type === 'SUCCESS' ? 'bg-green-50 text-green-600' : 
+                                    tip.type === 'WARNING' ? 'bg-amber-50 text-amber-600' : 
+                                    'bg-blue-50 text-blue-600'
+                                  }`}>
+                                    {tip.type === 'SUCCESS' ? '추천' : tip.type === 'WARNING' ? '주의' : '참고'}
+                                  </span>
+                                </div>
+                                <p className="text-[12px] text-gray-500 leading-relaxed">{tip.description}</p>
+                                {coach && (
+                                  <p className="text-[10px] text-gray-400 mt-2 font-medium">
+                                    {coach.avatar} {coach.name} 코치 제공
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </div>
+                  );
+                })()}
               </section>
 
               <section className="fade-in">
@@ -319,18 +663,50 @@ export default function App() {
         )}
       </div>
 
-      <nav className="bg-white/95 backdrop-blur-3xl border-t border-gray-100 shrink-0 h-[100px] flex items-start px-12 rounded-t-[50px] shadow-[0_-20px_50px_rgba(0,0,0,0.04)] z-50">
-        <div className="nav-active-pill" style={{ transform: activeTab === 'CHATS' ? 'translateX(0)' : 'translateX(100%)', width: '50%', left: '0' }}>
-           <div className="bg-gradient-to-br from-[#7EA1FF] to-[#A29BFE] w-[84px] h-[52px] rounded-[24px] mx-auto opacity-10"></div>
+      <nav className="bg-white border-t border-gray-100 shrink-0 z-50 pb-safe">
+        <div className="flex items-center justify-around px-6 py-3">
+          <button 
+            onClick={() => setActiveTab('CHATS')} 
+            className={`relative flex flex-col items-center gap-1 px-6 py-2 rounded-2xl transition-all duration-300 ${
+              activeTab === 'CHATS' 
+                ? 'bg-gradient-to-br from-[#7EA1FF] to-[#A29BFE] text-white shadow-lg shadow-blue-200/50' 
+                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <div className="relative">
+              {/* AI 로봇 아이콘 */}
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                {/* 로봇 머리 */}
+                <rect x="5" y="7" width="14" height="12" rx="3" />
+                {/* 안테나 */}
+                <circle cx="12" cy="4" r="1.5" />
+                <rect x="11.25" y="5" width="1.5" height="2" />
+                {/* 눈 - 빛나는 효과 */}
+                <circle cx="9" cy="12" r="1.5" fill={activeTab === 'CHATS' ? '#7EA1FF' : 'white'} />
+                <circle cx="15" cy="12" r="1.5" fill={activeTab === 'CHATS' ? '#7EA1FF' : 'white'} />
+                {/* 입 - 웃는 모양 */}
+                <path d="M9 15.5c0 0 1.5 1.5 3 1.5s3-1.5 3-1.5" stroke={activeTab === 'CHATS' ? '#7EA1FF' : 'white'} strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+              </svg>
+              {/* AI 스파클 효과 */}
+              <span className={`absolute -top-1 -right-1 text-[8px] ${activeTab === 'CHATS' ? 'animate-pulse' : ''}`}>✨</span>
+            </div>
+            <span className="text-[10px] font-bold tracking-wide">AI코치</span>
+          </button>
+          
+          <button 
+            onClick={() => setActiveTab('INSIGHTS')} 
+            className={`relative flex flex-col items-center gap-1 px-6 py-2 rounded-2xl transition-all duration-300 ${
+              activeTab === 'INSIGHTS' 
+                ? 'bg-gradient-to-br from-[#7EA1FF] to-[#A29BFE] text-white shadow-lg shadow-blue-200/50' 
+                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            <span className="text-[10px] font-bold tracking-wide">리포트</span>
+          </button>
         </div>
-        <button onClick={() => setActiveTab('CHATS')} className={`relative z-10 flex-1 flex flex-col items-center justify-center h-[90px] gap-1.5 transition-all ${activeTab === 'CHATS' ? 'text-[#7EA1FF] scale-110' : 'text-gray-300'}`}>
-          <div className={`p-2 rounded-xl transition-colors ${activeTab === 'CHATS' ? 'bg-blue-50' : ''}`}><svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-          <span className="text-[10px] font-black uppercase tracking-widest mono">COACH</span>
-        </button>
-        <button onClick={() => setActiveTab('INSIGHTS')} className={`relative z-10 flex-1 flex flex-col items-center justify-center h-[90px] gap-1.5 transition-all ${activeTab === 'INSIGHTS' ? 'text-[#7EA1FF] scale-110' : 'text-gray-300'}`}>
-          <div className={`p-2 rounded-xl transition-colors ${activeTab === 'INSIGHTS' ? 'bg-blue-50' : ''}`}><svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></div>
-          <span className="text-[10px] font-black uppercase tracking-widest mono">INSIGHT</span>
-        </button>
       </nav>
     </div>
   );

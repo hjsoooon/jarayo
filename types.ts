@@ -19,6 +19,16 @@ export interface ActionTip {
   title: string;
   description: string;
   type: 'SUCCESS' | 'WARNING' | 'INFO';
+  category?: 'SLEEP' | 'NUTRITION' | 'PSYCHOLOGY' | 'DEVELOPMENT' | 'POOP' | 'GENERAL';
+}
+
+export interface IllustrationCard {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  coachId: CoachRole;
 }
 
 export interface CarouselTip {
@@ -62,6 +72,18 @@ export interface ChecklistItem {
   category: string;
 }
 
+export interface GrowthMetric {
+  id: string;
+  icon: string;
+  label: string;
+  value: string;
+  unit: string;
+  progress: number; // 0-100
+  status: 'good' | 'normal' | 'warning';
+  trend: 'up' | 'down' | 'stable';
+  trendText: string;
+}
+
 export interface InsightReport {
   summary: string;
   statusIcon: string;
@@ -77,4 +99,5 @@ export interface InsightReport {
     value: number;
     compareText: string;
   }[];
+  growthMetrics?: GrowthMetric[];
 }
