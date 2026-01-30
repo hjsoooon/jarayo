@@ -422,21 +422,29 @@ export default function App() {
                 const lastCoach = lastAssistant?.coachId ? COACHES.find(c => c.id === lastAssistant.coachId) : null;
                 
                 return (
-                  <div className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-4 rounded-2xl text-white shadow-lg relative overflow-hidden">
+                  <div 
+                    onClick={() => setActiveTab('CHATS')}
+                    className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-4 rounded-2xl text-white shadow-lg relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
+                  >
                     <div className="absolute -right-2 -bottom-2 text-[60px] opacity-10">💬</div>
                     <div className="relative z-10">
                       {userMessages.length > 0 ? (
                         <>
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="px-2 py-0.5 bg-white/20 rounded-full text-[9px] font-bold uppercase tracking-wider">
-                              최근 상담
-                            </div>
-                            {lastCoach && (
-                              <div className="px-1.5 py-0.5 bg-white/15 rounded text-[9px] font-medium flex items-center gap-1">
-                                <span className="text-xs">{lastCoach.avatar}</span>
-                                <span>{lastCoach.name}</span>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="px-2 py-0.5 bg-white/20 rounded-full text-[9px] font-bold uppercase tracking-wider">
+                                최근 상담
                               </div>
-                            )}
+                              {lastCoach && (
+                                <div className="px-1.5 py-0.5 bg-white/15 rounded text-[9px] font-medium flex items-center gap-1">
+                                  <span className="text-xs">{lastCoach.avatar}</span>
+                                  <span>{lastCoach.name}</span>
+                                </div>
+                              )}
+                            </div>
+                            <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                            </svg>
                           </div>
                           <p className="text-[13px] font-medium leading-snug mb-2 line-clamp-1">
                             "{userMessages[userMessages.length - 1]?.content}"
@@ -447,12 +455,17 @@ export default function App() {
                           </div>
                         </>
                       ) : (
-                        <>
-                          <p className="text-[13px] font-medium leading-snug mb-1">
-                            AI 코치에게 첫 질문을 해보세요! 🎉
-                          </p>
-                          <span className="text-[10px] text-white/70">수면, 이유식, 발달, 심리, 배변</span>
-                        </>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-[13px] font-medium leading-snug mb-1">
+                              AI 코치에게 첫 질문을 해보세요! 🎉
+                            </p>
+                            <span className="text-[10px] text-white/70">수면, 이유식, 발달, 심리, 배변</span>
+                          </div>
+                          <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                          </svg>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -614,7 +627,23 @@ export default function App() {
                       {recentTips.map((tip, i) => {
                         const coach = COACHES.find(c => c.id === tip.coachId);
                         return (
-                          <div key={i} className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50">
+                          <button 
+                            key={i} 
+                            onClick={() => setSelectedGuide({
+                              title: tip.title,
+                              description: tip.description,
+                              emoji: tip.icon,
+                              gradient: coach?.bgColor?.includes('gradient') 
+                                ? coach.bgColor.replace('linear-gradient(135deg, ', 'from-').replace(',', ' to-').replace(')', '') 
+                                : 'from-blue-400 to-purple-500',
+                              category: tip.category || 'GENERAL',
+                              tips: [
+                                `📖 ${tip.description}`,
+                                coach ? `💬 ${coach.name} 코치의 조언이에요!` : '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
+                              ]
+                            })}
+                            className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50 text-left active:scale-[0.98] transition-all"
+                          >
                             <div className="flex items-start gap-4">
                               <div 
                                 className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0"
@@ -640,8 +669,11 @@ export default function App() {
                                   </p>
                                 )}
                               </div>
+                              <svg className="w-4 h-4 text-gray-300 shrink-0 self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                              </svg>
                             </div>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
