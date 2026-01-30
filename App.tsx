@@ -127,7 +127,7 @@ export default function App() {
   };
 
   return (
-    <div className="max-w-md mx-auto h-[100dvh] bg-[#FDFBFA] flex flex-col relative overflow-hidden shadow-2xl">
+    <div className="w-full max-w-md mx-auto h-[100dvh] bg-[#FDFBFA] flex flex-col relative overflow-x-hidden shadow-2xl">
       {showConfetti && <ConfettiEffect />}
       
       {/* 가이드 상세 보기 모달 */}
@@ -195,7 +195,7 @@ export default function App() {
 
       <div className="flex-1 overflow-hidden flex flex-col">
         {activeTab === 'CHATS' ? (
-          <div className="flex-1 flex flex-col h-full overflow-hidden chat-container">
+          <div className="flex-1 flex flex-col h-full overflow-hidden chat-container w-full">
             <header className="px-4 pt-[env(safe-area-inset-top,12px)] pb-3 bg-white/95 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-40 shrink-0">
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ export default function App() {
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto hide-scrollbar px-4 py-4 space-y-4 flex flex-col">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar px-4 py-4 space-y-4 flex flex-col w-full">
               {messages.length === 0 && (
                 <div className="flex flex-col items-center py-8 bubble-pop">
                   <div className="relative mb-4">
@@ -280,7 +280,7 @@ export default function App() {
                                     '💡 관련된 다른 팁들도 AI 코치에게 물어보세요!'
                                   ]
                                 })}
-                                className="w-[94%] bg-white rounded-2xl p-4 shadow-sm border border-gray-50 fade-in cursor-pointer hover:shadow-md hover:border-gray-100 transition-all active:scale-[0.98]"
+                                className="w-full bg-white rounded-2xl p-3 shadow-sm border border-gray-50 fade-in cursor-pointer hover:shadow-md hover:border-gray-100 transition-all active:scale-[0.98]"
                               >
                                 <div className="flex items-center gap-3">
                                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${illustCard.gradient} flex items-center justify-center text-2xl shrink-0`}>
@@ -314,8 +314,8 @@ export default function App() {
                           const relatedCards = ILLUSTRATION_CARDS[mainCategory as keyof typeof ILLUSTRATION_CARDS] || ILLUSTRATION_CARDS.GENERAL;
                           
                           return (
-                            <div className="mt-3 overflow-x-auto hide-scrollbar">
-                              <div className="flex gap-2" style={{ width: 'max-content' }}>
+                            <div className="mt-3 overflow-x-auto hide-scrollbar w-full">
+                              <div className="flex gap-2 pb-1" style={{ minWidth: 'min-content' }}>
                                 {relatedCards.slice(0, 3).map((card) => (
                                   <button 
                                     key={card.id}
