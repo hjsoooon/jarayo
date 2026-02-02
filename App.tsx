@@ -14,7 +14,7 @@ const ConfettiEffect = () => (
 );
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<AppTab>('INSIGHTS');
+  const [activeTab, setActiveTab] = useState<AppTab>('CHATS');
   const [timeFilter, setTimeFilter] = useState<'DAILY' | 'WEEKLY' | 'MONTHLY'>('DAILY');
   const [forcedCoachId, setForcedCoachId] = useState<CoachRole | null>(null);
   const [inputText, setInputText] = useState('');
@@ -37,6 +37,7 @@ export default function App() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const insightsContainerRef = useRef<HTMLDivElement>(null);
 
   const dateReviver = (key: string, value: any) => {
     if (key === 'timestamp' && typeof value === 'string') return new Date(value);
@@ -87,6 +88,12 @@ export default function App() {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isTyping, activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'INSIGHTS' && insightsContainerRef.current) {
+      insightsContainerRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
 
   const handleSendMessage = async (customText?: string) => {
     const textToSend = customText || inputText;
@@ -285,7 +292,7 @@ export default function App() {
                     ))}
                   </div>
                   <div>
-                    <h1 className="header-title text-[18px] leading-tight">JARAYO team</h1>
+                    <h1 className="header-title text-[18px] leading-tight">ZARAYO team</h1>
                     <span className="text-[10px] text-gray-400">AI 육아 코치</span>
                   </div>
                 </div>
@@ -555,7 +562,7 @@ export default function App() {
               })()}
             </header>
 
-            <div className="flex-1 overflow-y-auto hide-scrollbar p-7 space-y-10 pb-20">
+            <div ref={insightsContainerRef} className="flex-1 overflow-y-auto hide-scrollbar p-7 space-y-10 pb-20">
               <section className="fade-in">
                 <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Chat Insights</h3>
                 {(() => {

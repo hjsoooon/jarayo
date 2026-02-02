@@ -613,21 +613,21 @@ export const KEYWORD_RESPONSES = {
     coachId: 'PSYCHOLOGY' as const,
     responses: [
       {
-        text: "안녕하세요! 👋 Team JARAYO의 AI 육아 코치입니다. 만나서 반가워요! 저는 수면, 이유식, 발달, 심리, 배변 등 육아의 다양한 분야를 도와드리는 전문가 팀이에요. 어떤 고민이 있으신가요? 편하게 말씀해 주세요! 😊",
+        text: "안녕하세요! 👋 Team ZARAYO의 AI 육아 코치입니다. 만나서 반가워요! 저는 수면, 이유식, 발달, 심리, 배변 등 육아의 다양한 분야를 도와드리는 전문가 팀이에요. 어떤 고민이 있으신가요? 편하게 말씀해 주세요! 😊",
         tips: [
           { icon: '👶', title: '이렇게 질문해보세요', description: '"아이가 잠을 안 자요", "이유식 거부해요" 등 구체적으로 물어보시면 더 정확한 답변을 드릴 수 있어요!', type: 'INFO' as const, category: 'GENERAL' as const },
           { icon: '🌟', title: '5명의 전문 코치', description: '수면, 영양, 심리, 발달, 배변 전문가가 대기 중이에요.', type: 'SUCCESS' as const, category: 'GENERAL' as const }
         ]
       },
       {
-        text: "반갑습니다! 🎉 JARAYO 육아 AI 코치예요. 오늘 하루도 육아하시느라 정말 수고 많으셨어요. 저희가 조금이나마 도움이 되고 싶어요. 아이에 대해 궁금한 점이나 고민이 있으시면 언제든 편하게 물어봐 주세요!",
+        text: "반갑습니다! 🎉 ZARAYO 육아 AI 코치예요. 오늘 하루도 육아하시느라 정말 수고 많으셨어요. 저희가 조금이나마 도움이 되고 싶어요. 아이에 대해 궁금한 점이나 고민이 있으시면 언제든 편하게 물어봐 주세요!",
         tips: [
           { icon: '💬', title: '자유롭게 대화하세요', description: '질문 형식에 구애받지 않고 편하게 말씀해 주시면 됩니다.', type: 'INFO' as const, category: 'GENERAL' as const },
           { icon: '❤️', title: '육아는 함께할 때 더 쉬워져요', description: '혼자 고민하지 마세요. 언제나 여기 있을게요.', type: 'SUCCESS' as const, category: 'GENERAL' as const }
         ]
       },
       {
-        text: "안녕하세요! ✨ 저는 당신의 육아를 도와줄 AI 코치 JARAYO예요. 아기의 수면 패턴, 이유식, 성장 발달, 정서 케어, 배변 훈련까지 - 무엇이든 물어봐 주세요. 전문가의 따뜻하고 실용적인 조언을 드릴게요!",
+        text: "안녕하세요! ✨ 저는 당신의 육아를 도와줄 AI 코치 ZARAYO예요. 아기의 수면 패턴, 이유식, 성장 발달, 정서 케어, 배변 훈련까지 - 무엇이든 물어봐 주세요. 전문가의 따뜻하고 실용적인 조언을 드릴게요!",
         tips: [
           { icon: '🤖', title: '24시간 상담 가능', description: '새벽에 아이가 울어도 괜찮아요. 언제든 물어보세요!', type: 'INFO' as const, category: 'GENERAL' as const },
           { icon: '📚', title: '맞춤형 육아 가이드', description: '질문에 맞는 실천 팁을 카드로 제공해드려요.', type: 'SUCCESS' as const, category: 'GENERAL' as const }
@@ -699,7 +699,7 @@ export const KEYWORD_RESPONSES = {
     coachId: 'PSYCHOLOGY' as const,
     responses: [
       {
-        text: "네, 말씀해 주세요! 😊 어떤 부분이 궁금하신가요? 저희 JARAYO 팀은 수면, 이유식, 발달, 심리, 배변 등 육아의 다양한 영역을 도와드리고 있어요. 조금 더 구체적으로 말씀해 주시면 정확한 답변을 드릴 수 있어요!",
+        text: "네, 말씀해 주세요! 😊 어떤 부분이 궁금하신가요? 저희 ZARAYO 팀은 수면, 이유식, 발달, 심리, 배변 등 육아의 다양한 영역을 도와드리고 있어요. 조금 더 구체적으로 말씀해 주시면 정확한 답변을 드릴 수 있어요!",
         tips: [
           { icon: '💡', title: '이런 질문을 해보세요', description: '"통잠 자는 법", "이유식 시작 시기", "떼쓸 때 어떻게 해요?" 등', type: 'INFO' as const, category: 'GENERAL' as const },
           { icon: '❤️', title: '함께해요', description: '육아의 모든 순간, 저희가 함께합니다.', type: 'SUCCESS' as const, category: 'GENERAL' as const }
