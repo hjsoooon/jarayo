@@ -49,6 +49,40 @@ export default function App() {
     return saved ? JSON.parse(saved, dateReviver) : [];
   });
 
+  // 체크리스트 완료 상태 저장
+  const [completedChecklist, setCompletedChecklist] = useState<Record<string, boolean>>(() => {
+    const saved = localStorage.getItem('parenting_checklist_completed');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  // 채팅에서 추출한 동적 체크리스트 생성
+  const dynamicChecklist = React.useMemo(() => {
+    const tipsFromChat = messages
+      .filter(m => m.role === 'assistant' && m.tips && m.tips.length > 0)
+      .flatMap(m => m.tips || [])
+      .filter(tip => tip.type === 'SUCCESS') // 추천 타입만 체크리스트로
+      .slice(-6) // 최근 6개만
+      .map((tip, idx) => ({
+        id: `tip-${idx}-${tip.title}`,
+        text: tip.title,
+        description: tip.description,
+        completed: completedChecklist[`tip-${idx}-${tip.title}`] || false,
+        category: tip.category || 'GENERAL',
+        icon: tip.icon
+      }));
+    
+    // 채팅 기반 체크리스트가 없으면 기본값
+    if (tipsFromChat.length === 0) {
+      return [
+        { id: 'default-1', text: 'AI 코치에게 첫 질문하기', description: '육아 고민을 물어보세요!', completed: completedChecklist['default-1'] || false, category: 'GENERAL', icon: '💬' },
+        { id: 'default-2', text: '수면 루틴 상담받기', description: '아이 수면 패턴을 체크해보세요', completed: completedChecklist['default-2'] || false, category: 'SLEEP', icon: '😴' },
+        { id: 'default-3', text: '이유식 시기 확인하기', description: '영양 코치에게 물어보세요', completed: completedChecklist['default-3'] || false, category: 'NUTRITION', icon: '🥣' }
+      ];
+    }
+    
+    return tipsFromChat;
+  }, [messages, completedChecklist]);
+
   const [insightData, setInsightData] = useState<InsightReport>({
     summary: "생후 52일, 민준이는 오늘 7시간 통잠에 성공했어요! 수면 의식이 자리를 잡아가고 있네요.",
     statusIcon: "🌙",
@@ -57,12 +91,7 @@ export default function App() {
       { coachId: 'NUTRITION', title: '성장 영양 가이드', summary: '오전 10시 수유량을 20ml 늘려보세요. 낮 동안의 에너지가 보충되어 밤잠이 더 깊어집니다.', tags: ['#수유량조절', '#영양설계'] },
       { coachId: 'PSYCHOLOGY', title: '정서 발달 인사이트', summary: '눈맞춤 시간이 15% 증가했습니다. 옹알이에 적극적으로 반응해 주시는 것이 애착 형성에 매우 좋습니다.', tags: ['#정서교감', '#애착형성'] }
     ],
-    checklist: [
-      { id: '1', text: '저녁 7시 따뜻한 물로 목욕시키기', completed: false, category: 'SLEEP' },
-      { id: '2', text: '비타민 D 영양제 챙겨주기', completed: true, category: 'NUTRITION' },
-      { id: '3', text: '방 안 온도 22.5도 유지하기', completed: false, category: 'ENV' },
-      { id: '4', text: '터미타임 5분 2회 실시하기', completed: false, category: 'DEV' }
-    ],
+    checklist: [],
     trends: [
       { label: '월', value: 45, compareText: '평균' }, { label: '화', value: 55, compareText: '+10%' },
       { label: '수', value: 85, compareText: '최고' }, { label: '목', value: 40, compareText: '-15%' },
@@ -127,15 +156,14 @@ export default function App() {
   };
 
   const toggleChecklist = (id: string) => {
-    setInsightData(prev => ({
-      ...prev, checklist: prev.checklist.map(item => {
-        if (item.id === id) {
-          if (!item.completed) { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 2000); }
-          return { ...item, completed: !item.completed };
-        }
-        return item;
-      })
-    }));
+    const newCompleted = !completedChecklist[id];
+    if (newCompleted) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+    }
+    const updated = { ...completedChecklist, [id]: newCompleted };
+    setCompletedChecklist(updated);
+    localStorage.setItem('parenting_checklist_completed', JSON.stringify(updated));
   };
 
   const navigateToCoach = (coachId: CoachRole) => {
@@ -781,11 +809,21 @@ export default function App() {
 
               <section className="fade-in">
                 <h3 className="text-[15px] font-black text-[#222] uppercase tracking-[0.15em] mono mb-5">Action Checklist</h3>
-                <div className="bg-white rounded-[40px] overflow-hidden shadow-sm border border-gray-50">
-                  {insightData.checklist.map((item, i) => (
-                    <div key={item.id} onClick={() => toggleChecklist(item.id)} className={`flex items-center gap-5 p-6 cursor-pointer border-b border-gray-50 last:border-none ${item.completed ? 'bg-gray-50/40 opacity-50' : ''}`}>
-                      <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all ${item.completed ? 'bg-[#7EA1FF] border-transparent' : 'border-gray-200'}`}>{item.completed && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7"/></svg>}</div>
-                      <span className={`flex-1 text-[14px] font-bold ${item.completed ? 'text-gray-300 line-through' : 'text-[#444]'}`}>{item.text}</span>
+                <div className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-50">
+                  {dynamicChecklist.map((item) => (
+                    <div key={item.id} onClick={() => toggleChecklist(item.id)} className={`flex items-center gap-4 p-5 cursor-pointer border-b border-gray-50 last:border-none transition-all ${item.completed ? 'bg-gray-50/40' : 'hover:bg-gray-50/50'}`}>
+                      <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${item.completed ? 'bg-[#7EA1FF] border-transparent' : 'border-gray-200'}`}>
+                        {item.completed && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7"/></svg>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{item.icon}</span>
+                          <span className={`text-[14px] font-bold ${item.completed ? 'text-gray-300 line-through' : 'text-[#333]'}`}>{item.text}</span>
+                        </div>
+                        {item.description && (
+                          <p className={`text-[11px] mt-0.5 ${item.completed ? 'text-gray-300' : 'text-gray-400'}`}>{item.description}</p>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
