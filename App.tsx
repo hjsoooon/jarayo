@@ -85,7 +85,11 @@ export default function App() {
 
   useEffect(() => {
     if (activeTab === 'CHATS') {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // 탭 전환 시 DOM 렌더링 후 스크롤 이동을 위한 지연
+      const timer = setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [messages, isTyping, activeTab]);
 
@@ -150,7 +154,7 @@ export default function App() {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedGuide(null)}
           />
-          <div className="relative w-full max-w-md bg-white rounded-t-[32px] shadow-2xl animate-slide-up overflow-hidden max-h-[85vh] flex flex-col">
+          <div className="relative w-full max-w-md bg-white rounded-t-[32px] shadow-2xl animate-slide-up overflow-hidden max-h-[70vh] flex flex-col mb-0" style={{ marginTop: 'env(safe-area-inset-top, 20px)' }}>
             {/* 드래그 핸들 */}
             <div className="flex justify-center pt-3 pb-1 bg-white shrink-0">
               <div className="w-10 h-1 bg-gray-200 rounded-full"></div>
