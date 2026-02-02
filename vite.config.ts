@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   // GitHub Pages 저장소 이름에 맞게 base 경로 설정
-  base: '/jarayo/',
+  base: '/Zarayo/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
