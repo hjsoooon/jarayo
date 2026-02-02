@@ -446,7 +446,7 @@ export default function App() {
                   </div>
                 </div>
               )}
-              <div ref={messagesEndRef} className="h-10 shrink-0" />
+              <div ref={messagesEndRef} className="h-2 shrink-0" />
             </div>
 
             {/* 하단 입력 영역 */}
