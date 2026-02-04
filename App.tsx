@@ -390,8 +390,9 @@ export default function App() {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // 응답 받은 후 해시 업데이트 (성공)
-      updateHash(`success-${newMsgCount}`);
+      // 응답 받은 후 해시 업데이트 (코치 답변)
+      const coachName = COACHES.find(c => c.id === response.selectedCoachId)?.name || 'AI';
+      updateHash(`answer-${coachName}-${newMsgCount}`);
     } catch (error) { 
       console.error(error); 
     } finally { 
