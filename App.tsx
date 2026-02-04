@@ -5,17 +5,25 @@ import { Message, CoachRole, AppTab, ChecklistItem, InsightReport } from './type
 import { getGeminiResponse } from './geminiService';
 
 const ConfettiEffect = () => (
-  <div className="fixed inset-x-0 top-20 pointer-events-none z-[200] flex justify-center animate-fade-in-down">
-    <div className="bg-white/95 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-gray-100 flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-sm">
-        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/>
-        </svg>
+  <div className="fixed inset-0 pointer-events-none z-[200] flex items-center justify-center animate-celebration">
+    {/* 배경 오버레이 */}
+    <div className="absolute inset-0 bg-black/10"></div>
+    
+    {/* 축하 컨텐츠 */}
+    <div className="relative flex flex-col items-center gap-3">
+      {/* 메인 이모지 */}
+      <div className="text-6xl animate-bounce-gentle">🎉</div>
+      
+      {/* 메시지 */}
+      <div className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-full shadow-lg">
+        <p className="text-[15px] font-bold text-gray-800">완료!</p>
       </div>
-      <div>
-        <p className="text-[14px] font-bold text-gray-800">잘하셨어요!</p>
-        <p className="text-[12px] text-gray-500">오늘도 한 걸음 성장했어요 ✨</p>
-      </div>
+      
+      {/* 주변 파티클 */}
+      <div className="absolute -top-4 -left-8 text-2xl animate-float-1">✨</div>
+      <div className="absolute -top-2 right-[-30px] text-xl animate-float-2">⭐</div>
+      <div className="absolute bottom-0 -left-10 text-lg animate-float-3">🌟</div>
+      <div className="absolute bottom-2 right-[-35px] text-xl animate-float-1">💫</div>
     </div>
   </div>
 );
