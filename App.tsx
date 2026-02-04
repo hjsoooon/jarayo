@@ -70,12 +70,66 @@ export default function App() {
       .replace(/\s*\(.+\)$/, '')  // 괄호 내용 제거
       .trim();
     
-    // 이미 "~하기"로 끝나면 그대로
+    // 이미 "~하기/주기/보기"로 끝나면 그대로
     if (text.endsWith('하기') || text.endsWith('주기') || text.endsWith('보기')) {
       return text;
     }
     
-    // 명사형으로 끝나면 적절한 동사 붙이기
+    // 정보형 문장 ("~있어요", "~해요" 등)은 행동형으로 변환
+    if (text.endsWith('있어요') || text.endsWith('해요') || text.endsWith('예요') || text.endsWith('이에요')) {
+      // "발달은 개인차가 있어요" -> "개인차 인정하기"
+      if (text.includes('개인차')) return '아이 발달 개인차 인정하기';
+      if (text.includes('균형')) return '영양 균형 맞추기';
+      return text.replace(/은?\s*(개인차가\s*)?있어요$|해요$|예요$|이에요$/, '') + ' 확인하기';
+    }
+    
+    // "~의 힘", "~의 마법" 등 수사적 표현 -> 핵심 행동 추출
+    if (text.includes('의 힘') || text.includes('의 마법')) {
+      const core = text.replace(/의\s*(힘|마법)$/, '').trim();
+      return core + ' 자주 해주기';
+    }
+    
+    // 가이드, 팁, 방법, 법 -> "따라하기"
+    if (text.endsWith('가이드') || text.endsWith('팁') || text.endsWith('방법') || text.endsWith('법')) {
+      return text + ' 따라하기';
+    }
+    
+    // 루틴, 기법, 전략, 단계 -> "적용하기"
+    if (text.endsWith('루틴') || text.endsWith('기법') || text.endsWith('전략') || text.endsWith('단계')) {
+      return text + ' 적용하기';
+    }
+    
+    // 환경 -> "만들기"
+    if (text.endsWith('환경')) {
+      return text + ' 만들기';
+    }
+    
+    // 활용 -> "활용하기"
+    if (text.endsWith('활용')) {
+      return text + ' 활용하기';
+    }
+    
+    // 연습 -> "연습하기"
+    if (text.endsWith('연습')) {
+      return text + ' 연습하기';
+    }
+    
+    // 시도 -> "시도하기"
+    if (text.endsWith('시도')) {
+      return text + ' 시도하기';
+    }
+    
+    // 체크, 확인 -> "체크하기"
+    if (text.endsWith('체크') || text.endsWith('확인')) {
+      return text + '하기';
+    }
+    
+    // 비율 (1:1:1 등) -> "맞추기"
+    if (/\d+:\d+/.test(text)) {
+      return text + ' 맞추기';
+    }
+    
+    // 필수, 중요
     if (text.endsWith('필수')) {
       return text.replace('필수', '챙기기');
     }
@@ -83,7 +137,12 @@ export default function App() {
       return text.replace('중요', '신경쓰기');
     }
     
-    // 기본적으로 "실천하기" 또는 "하기" 붙이기
+    // 자극 -> "해주기"
+    if (text.endsWith('자극')) {
+      return text + ' 해주기';
+    }
+    
+    // 기본적으로 "실천하기" 붙이기
     return text + ' 실천하기';
   };
 
