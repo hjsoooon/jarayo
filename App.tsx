@@ -410,9 +410,11 @@ export default function App() {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // 응답 받은 후 해시 업데이트 (메시지 유형 + 코치)
+      // 응답 받은 후 해시 업데이트 (메시지 유형 + 코치) - 약간의 지연 추가
       const coachName = COACHES.find(c => c.id === response.selectedCoachId)?.name || 'AI';
-      updateHash(`a-${msgType}-${coachName}-${newMsgCount}`);
+      setTimeout(() => {
+        window.location.hash = `a-${msgType}-${coachName}-${newMsgCount}`;
+      }, 100);
     } catch (error) { 
       console.error(error); 
     } finally { 
