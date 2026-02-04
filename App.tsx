@@ -576,7 +576,10 @@ export default function App() {
               <div className="overflow-x-auto hide-scrollbar py-2 border-b border-gray-50">
                 <div className="flex gap-1.5 px-3 min-w-max">
                   <button 
-                    onClick={() => setForcedCoachId(null)} 
+                    onClick={() => {
+                      updateHash('coach-all');
+                      setForcedCoachId(null);
+                    }} 
                     className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${!forcedCoachId ? 'bg-[#7EA1FF] text-white' : 'bg-gray-100 text-gray-500'}`}
                   >
                     전체
@@ -584,7 +587,10 @@ export default function App() {
                   {COACHES.map(c => (
                     <button 
                       key={c.id} 
-                      onClick={() => setForcedCoachId(c.id)} 
+                      onClick={() => {
+                        updateHash(`coach-${c.name}`);
+                        setForcedCoachId(c.id);
+                      }} 
                       className={`px-3 py-1.5 rounded-full text-[11px] font-bold flex items-center gap-1 transition-all ${forcedCoachId === c.id ? 'text-white' : 'bg-gray-100 text-gray-500'}`} 
                       style={{ background: forcedCoachId === c.id ? c.bgColor : undefined }}
                     >
