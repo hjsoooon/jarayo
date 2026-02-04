@@ -361,6 +361,7 @@ export default function App() {
                     <button 
                       onClick={() => {
                         const question = selectedGuide.fullGuide?.relatedQuestion || '';
+                        updateHash('ask-from-guide');
                         setSelectedGuide(null);
                         setActiveTab('CHATS');
                         setTimeout(() => handleSendMessage(question), 150);
@@ -826,7 +827,10 @@ export default function App() {
                         <p className="text-[14px] font-bold text-gray-400">아직 받은 팁이 없어요</p>
                         <p className="text-[12px] text-gray-300 mt-1">AI 코치에게 질문하면 실천 팁을 받을 수 있어요!</p>
                         <button 
-                          onClick={() => setActiveTab('CHATS')}
+                          onClick={() => {
+                            updateHash('go-to-chat');
+                            setActiveTab('CHATS');
+                          }}
                           className="mt-4 px-5 py-2.5 bg-gradient-to-r from-[#7EA1FF] to-[#A29BFE] text-white text-[12px] font-bold rounded-2xl shadow-lg"
                         >
                           질문하러 가기 →
@@ -846,20 +850,23 @@ export default function App() {
                         return (
                           <button 
                             key={i} 
-                            onClick={() => setSelectedGuide({
-                              title: tip.title,
-                              description: tip.description,
-                              emoji: tip.icon,
-                              gradient: coach?.bgColor?.includes('gradient') 
-                                ? coach.bgColor.replace('linear-gradient(135deg, ', 'from-').replace(',', ' to-').replace(')', '') 
-                                : 'from-blue-400 to-purple-500',
-                              category: category,
-                              tips: [
-                                `📖 ${tip.description}`,
-                                coach ? `💬 ${coach.name} 코치의 조언이에요!` : '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
-                              ],
-                              fullGuide: (matchingCard as any)?.fullGuide
-                            })}
+                            onClick={() => {
+                              updateHash(`tip-${i + 1}`);
+                              setSelectedGuide({
+                                title: tip.title,
+                                description: tip.description,
+                                emoji: tip.icon,
+                                gradient: coach?.bgColor?.includes('gradient') 
+                                  ? coach.bgColor.replace('linear-gradient(135deg, ', 'from-').replace(',', ' to-').replace(')', '') 
+                                  : 'from-blue-400 to-purple-500',
+                                category: category,
+                                tips: [
+                                  `📖 ${tip.description}`,
+                                  coach ? `💬 ${coach.name} 코치의 조언이에요!` : '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
+                                ],
+                                fullGuide: (matchingCard as any)?.fullGuide
+                              });
+                            }}
                             className="bg-white p-5 rounded-[28px] shadow-sm border border-gray-50 text-left active:scale-[0.98] transition-all"
                           >
                             <div className="flex items-start gap-4">
