@@ -441,7 +441,10 @@ export default function App() {
                     {COACHES.slice(0, 3).map((coach, i) => (
                       <button 
                         key={i} 
-                        onClick={() => handleSendMessage(coach.quickQuestions?.[0])} 
+                        onClick={() => {
+                          updateHash(`quick-${coach.name}`);
+                          handleSendMessage(coach.quickQuestions?.[0]);
+                        }} 
                         className="w-full p-3 rounded-2xl border border-gray-100 bg-white flex items-center gap-3 text-left active:scale-[0.98] active:bg-gray-50 transition-all"
                       >
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0" style={{ background: coach.bgColor }}>{coach.avatar}</div>
@@ -481,18 +484,21 @@ export default function App() {
                             return (
                               <div 
                                 key={tIdx} 
-                                onClick={() => setSelectedGuide({
-                                  title: illustCard.title || tip.title,
-                                  description: illustCard.description || tip.description,
-                                  emoji: illustCard.emoji || tip.icon,
-                                  gradient: illustCard.gradient,
-                                  category: category,
-                                  tips: [
-                                    '✓ ' + tip.description,
-                                    '💡 관련된 다른 팁들도 AI 코치에게 물어보세요!'
-                                  ],
-                                  fullGuide: illustCard.fullGuide
-                                })}
+                                onClick={() => {
+                                  updateHash(`chat-tip-${tIdx + 1}`);
+                                  setSelectedGuide({
+                                    title: illustCard.title || tip.title,
+                                    description: illustCard.description || tip.description,
+                                    emoji: illustCard.emoji || tip.icon,
+                                    gradient: illustCard.gradient,
+                                    category: category,
+                                    tips: [
+                                      '✓ ' + tip.description,
+                                      '💡 관련된 다른 팁들도 AI 코치에게 물어보세요!'
+                                    ],
+                                    fullGuide: illustCard.fullGuide
+                                  });
+                                }}
                                 className="w-full bg-white rounded-2xl p-3 shadow-sm border border-gray-50 fade-in cursor-pointer hover:shadow-md hover:border-gray-100 transition-all active:scale-[0.98]"
                               >
                                 <div className="flex items-center gap-3">
@@ -529,21 +535,24 @@ export default function App() {
                           return (
                             <div className="mt-3 overflow-x-auto hide-scrollbar w-full">
                               <div className="flex gap-2 pb-1" style={{ minWidth: 'min-content' }}>
-                                {relatedCards.slice(0, 3).map((card: any) => (
+                                {relatedCards.slice(0, 3).map((card: any, cardIdx: number) => (
                                   <button 
                                     key={card.id}
-                                    onClick={() => setSelectedGuide({
-                                      title: card.title,
-                                      description: card.description,
-                                      emoji: card.emoji || '📚',
-                                      gradient: card.gradient,
-                                      category: mainCategory,
-                                      tips: [
-                                        '📖 ' + card.description,
-                                        '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
-                                      ],
-                                      fullGuide: card.fullGuide
-                                    })}
+                                    onClick={() => {
+                                      updateHash(`related-guide-${cardIdx + 1}`);
+                                      setSelectedGuide({
+                                        title: card.title,
+                                        description: card.description,
+                                        emoji: card.emoji || '📚',
+                                        gradient: card.gradient,
+                                        category: mainCategory,
+                                        tips: [
+                                          '📖 ' + card.description,
+                                          '💬 더 자세한 내용은 AI 코치에게 질문해보세요!'
+                                        ],
+                                        fullGuide: card.fullGuide
+                                      });
+                                    }}
                                     className="flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
                                   >
                                     <span className="text-base">{(card as any).emoji || '📚'}</span>
@@ -643,7 +652,10 @@ export default function App() {
                 
                 return (
                   <div 
-                    onClick={() => setActiveTab('CHATS')}
+                    onClick={() => {
+                      updateHash('recent-chat-card');
+                      setActiveTab('CHATS');
+                    }}
                     className="bg-gradient-to-br from-[#7EA1FF] via-[#8E9CFF] to-[#A29BFE] p-4 rounded-2xl text-white shadow-lg relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
                   >
                     <div className="absolute -right-2 -bottom-2 text-[60px] opacity-10">💬</div>
