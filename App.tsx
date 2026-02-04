@@ -365,18 +365,38 @@ export default function App() {
     }
   }, [activeTab]);
 
+  // 메시지 내용에 따른 고유 해시 타입 결정
+  const getMessageHashType = (text: string): string => {
+    const lowerText = text.toLowerCase();
+    // 인사말
+    if (/안녕|반가|하이|헬로|hello|hi/.test(lowerText)) return 'greeting';
+    // 수면 관련
+    if (/수면|잠|통잠|낮잠|밤|재우|자요|안자|깨요/.test(lowerText)) return 'sleep';
+    // 심리/힘듦 관련
+    if (/힘들|지쳐|포기|우울|스트레스|화나|짜증|불안|걱정/.test(lowerText)) return 'mental';
+    // 이유식/영양 관련
+    if (/이유식|먹|영양|철분|분유|수유|밥/.test(lowerText)) return 'nutrition';
+    // 발달 관련
+    if (/발달|성장|뒤집|기어|걷|말|언어/.test(lowerText)) return 'development';
+    // 배변 관련
+    if (/기저귀|배변|변기|응가|쉬|똥/.test(lowerText)) return 'potty';
+    // 기본
+    return 'general';
+  };
+
   const handleSendMessage = async (customText?: string) => {
     const textToSend = customText || inputText;
     if (!textToSend.trim() || isTyping) return;
     
     const userMessage: Message = { id: Date.now().toString(), role: 'user', content: textToSend, timestamp: new Date() };
     const newMsgCount = messages.filter(m => m.role === 'user').length + 1;
+    const msgType = getMessageHashType(textToSend);
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
     
-    // 메시지 전송 시 해시 업데이트
-    updateHash(`chat-${newMsgCount}`);
+    // 메시지 전송 시 해시 업데이트 (메시지 유형 포함)
+    updateHash(`q-${msgType}-${newMsgCount}`);
     
     try {
       const response = await getGeminiResponse(messages, textToSend, forcedCoachId || undefined);
@@ -390,9 +410,9 @@ export default function App() {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // 응답 받은 후 해시 업데이트 (코치 답변)
+      // 응답 받은 후 해시 업데이트 (메시지 유형 + 코치)
       const coachName = COACHES.find(c => c.id === response.selectedCoachId)?.name || 'AI';
-      updateHash(`answer-${coachName}-${newMsgCount}`);
+      updateHash(`a-${msgType}-${coachName}-${newMsgCount}`);
     } catch (error) { 
       console.error(error); 
     } finally { 
